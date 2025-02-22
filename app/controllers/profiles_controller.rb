@@ -1,10 +1,17 @@
-class OrganizationsController < ApplicationController
+class ProfilesController < ApplicationController
   def index
-    @organizations = current_user.organizations
+    @user = current_user
+    @related_users =
+      Array(
+        current_user.organizations.includes(:users).map(&:users).flatten.uniq
+      )
   end
 
   def show
-    @organization = Organization.find(params[:id])
+    @user = User.find(params[:id])
+
+    @intersecting_orgs = @user.organizations & current_user.organizations
+    @are_intersecting_orgs = @intersecting_orgs.any?
   end
 
   def new
