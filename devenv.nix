@@ -1,10 +1,12 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   packages = with pkgs; [
     git
-    ruby_3_3
+    ruby_3_4
     pkg-config
     libyaml.dev
     openssl.dev
+    libffi
+    zlib
   ];
 
   enterShell = ''
@@ -15,7 +17,7 @@
 
   languages.ruby = {
     enable = true;
-    package = pkgs.ruby_3_3;
+    package = pkgs.ruby_3_4;
   };
 
   services.postgres = {
