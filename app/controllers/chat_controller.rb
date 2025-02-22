@@ -36,7 +36,7 @@ class ChatController < ApplicationController
 
     # prompt = session[:conversation].join("\n") + "\n" + prompt
 
-    api_key = "GEMINI_API_KEY"
+    api_key = ENV["GEMINI_API_KEY"]
     url = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=#{api_key}")
     
     http = Net::HTTP.new(url.host, url.port)
