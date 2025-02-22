@@ -3,12 +3,12 @@
     let
       version = "1.3.1";
 system = "x86_64-linux";
-devenv_root = "/home/nixos/29";
+devenv_root = "/home/joe/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
 devenv_tmpdir = "/run/user/1000/";
-devenv_runtime = "/run/user/1000/devenv-a6ad6ae";
+devenv_runtime = "/run/user/1000/devenv-36d72b0";
 devenv_istesting = false;
 
         in {
@@ -24,12 +24,12 @@ devenv_istesting = false;
         let
           version = "1.3.1";
 system = "x86_64-linux";
-devenv_root = "/home/nixos/29";
+devenv_root = "/home/joe/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
 devenv_tmpdir = "/run/user/1000/";
-devenv_runtime = "/run/user/1000/devenv-a6ad6ae";
+devenv_runtime = "/run/user/1000/devenv-36d72b0";
 devenv_istesting = false;
 
             devenv =

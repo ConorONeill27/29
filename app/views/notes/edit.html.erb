@@ -9,7 +9,20 @@
     <%= form.text_area :body, placeholder: @note.body %>
   </div>
 
+    <%= form_with model: @post do |form| %>
+    <%= form.label :content %>
+    <%= marksmith_tag form, :content %>
+    <%= form.submit %>
+
+
+
   <div>
     <%= form.submit "Update Note" %>
   </div>
+
+    <%= form_with model: @post do |form| %>
+    <%= form.label :content %>
+    <%= marksmith_tag form, :content %>
+    <%= form.submit %>
+
 <% end %>
