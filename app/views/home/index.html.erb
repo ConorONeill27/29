@@ -1,74 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title><%= content_for(:title) || "Group 29 Hack Ireland" %></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-
-  <style>
-    /* Global styles */
-    body {
-      margin: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #ffffff; /* primarily white */
-      color: #333;
-    }
-    
-    /* Top bar */
-    header {
-      background-color: #ffffff;
-      border-bottom: 3px solid #3498db; /* blue accent */
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #3498db; /* blue for title text */
-    }
-    
-    /* Container for boxes */
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 40px 20px;
-      gap: 30px;
-    }
-    
-    /* Box styling */
-    .box {
-      background-color: #ffffff;
-      border: 2px solid #3498db;
-      border-radius: 12px;
-      width: 220px;
-      height: 150px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      font-size: 20px;
-      font-weight: 500;
-      color: #3498db;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    
-    .box:hover {
-      background-color: #3498db;
-      color: #ffffff;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    Group 29 Hack Ireland
-  </header>
-
-  <div class="container">
-    <a href="/finance" class="box">Finance</a>
-    <a href="/product" class="box">Product</a>
-    <a href="/hr" class="box">HR</a>
-    <a href="/marketing" class="box">Marketing</a>
+<section class="hero">
+  <h1>Innovate Faster with Bundles</h1>
+  <p>
+    Empowering businesses with cutting-edge software solutions. 
+    From AI-driven analytics to seamless cloud integrations, 
+    we’re shaping the future of technology.
+  </p>
+  <div class="hero-buttons">
+    <a href="#explore" class="btn">Explore Solutions</a>
+    <a href="#schedule" class="btn">Schedule a Demo</a>
   </div>
-</body>
-</html>
+</section>
