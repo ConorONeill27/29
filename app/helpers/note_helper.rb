@@ -1,4 +1,4 @@
-module NotesHelper
+module NoteHelper
   MAX_BODY_CHARS = 25
 
   def markdown(text)

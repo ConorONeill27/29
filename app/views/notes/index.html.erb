@@ -5,8 +5,8 @@
   </tr>
    <% @notes.each do |note| %>
      <tr>
-        <td>
-          <a href="/notes/<%= note.id %>"><%= note.title %></a>
+       <td>
+          <%= link_to note.title, note %>
           <%= shorten(note.body) %>
         </td>
       </tr>
