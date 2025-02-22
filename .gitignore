@@ -33,3 +33,4 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+.devenv/state/.bundle/ruby/3.1.0/doc/i18n-1.14.7/ri/I18n/Gettext/Helpers/n_-i.ri
