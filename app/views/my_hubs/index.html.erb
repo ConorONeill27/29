@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Optional: same font as homepage -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
+  <style>
+    /* GLOBAL STYLES */
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0c0f17, #000);
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background-color: #14161c; /* Slightly lighter than the gradient */
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .categories {
+      list-style: none;
+    }
+    .categories li {
+      margin-bottom: 0.75rem;
+    }
+    .categories a {
+      text-decoration: none;
+      color: #aaa;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .categories a:hover {
+      color: #fff;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 2rem;
+    }
+
+    /* HEADER + SEARCH */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .top-bar h1 {
+      font-size: 1.8rem;
+    }
+    .search-bar {
+      position: relative;
+      width: 240px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background-color: #1a1f2a;
+      color: #fff;
+      outline: none;
+    }
+    /* Optional search icon placeholder */
+    .search-bar::before {
+      content: "🔍";
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    /* GRID OF BOXES */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background-color: #1a1f2a;
+      border-radius: 8px;
+      padding: 1rem;
+      text-decoration: none;
+      color: #fff;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .card:hover {
+      background-color: #2a2f3a;
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      font-size: 2rem; /* Placeholder icon size */
+      margin-bottom: 0.75rem;
+    }
+    .card-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .card-desc {
+      font-size: 0.9rem;
+      color: #ccc;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Categories</h2>
+    <ul class="categories">
+      <li><a href="#">All</a></li>
+      <li><a href="#">Marketing</a></li>
+      <li><a href="#">Productivity</a></li>
+      <li><a href="#">Sales</a></li>
+      <li><a href="#">Finance</a></li>
+      <li><a href="#">Communication</a></li>
+      <li><a href="#">Cloud Services</a></li>
+      <li><a href="#">Security</a></li>
+      <li><a href="#">Design</a></li>
+      <li><a href="#">Development</a></li>
+      <li><a href="#">Human Resources</a></li>
+      <li><a href="#">Customer Support</a></li>
+      <li><a href="#">E-commerce</a></li>
+      <li><a href="#">Social Media</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="top-bar">
+      <h1>My Hub</h1>
+      <div class="search-bar">
+        <input type="text" placeholder="Search coworkers...">
+      </div>
+    </div>
+
+    <!-- GRID OF CLICKABLE BOXES -->
+    <div class="grid">
+      <!-- Replace # with actual links/routes -->
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Alice Brown</div>
+        <div class="card-desc">Lead Engineer with 5 years of experience in AI and ML solutions.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Bob Johnson</div>
+        <div class="card-desc">Product Manager focusing on user-centric designs and roadmaps.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Catherine Li</div>
+        <div class="card-desc">Marketing Specialist delivering high-impact campaigns worldwide.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Daniel Ortiz</div>
+        <div class="card-desc">DevOps guru ensuring seamless integrations and cloud migrations.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Elena Garcia</div>
+        <div class="card-desc">HR coordinator streamlining recruitment and retention strategies.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Frank Wilson</div>
+        <div class="card-desc">Sales Executive pushing global expansion and partnership growth.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Grace Kim</div>
+        <div class="card-desc">UI/UX Designer crafting engaging user experiences and flows.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Henry Park</div>
+        <div class="card-desc">Finance analyst optimizing budgets and forecasting for success.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Ivy Nguyen</div>
+        <div class="card-desc">Customer Support lead ensuring top-notch client satisfaction.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Jack Thompson</div>
+        <div class="card-desc">Security engineer safeguarding infrastructure and data privacy.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👩</div>
+        <div class="card-title">Karen Lee</div>
+        <div class="card-desc">E-commerce strategist boosting online sales and conversions.</div>
+      </a>
+
+      <a href="#" class="card">
+        <div class="card-icon">👨</div>
+        <div class="card-title">Leo Foster</div>
+        <div class="card-desc">Social Media coordinator driving engagement across platforms.</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

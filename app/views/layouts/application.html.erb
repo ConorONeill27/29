@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Bundles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Example uses a Google Font. Replace with your own or system fonts if desired. -->
+  <!-- Using a Google Font (Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
@@ -17,7 +17,7 @@
     }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0c0f17, #000); /* Dark gradient */
+      background: linear-gradient(135deg, #0c0f17, #000);
       color: #fff;
     }
 
@@ -27,7 +27,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 2rem;
-      background: transparent; /* Allows gradient background to show through */
+      background: transparent;
     }
     .nav-left, .nav-right {
       display: flex;
@@ -50,7 +50,7 @@
     .demo-btn {
       text-decoration: none;
       padding: 0.6rem 1.2rem;
-      border: 2px solid #5865f2; /* Purple-Blue accent */
+      border: 2px solid #5865f2;
       border-radius: 6px;
       color: #fff;
       font-weight: 500;
@@ -67,7 +67,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: calc(100vh - 80px); /* subtract nav height */
+      min-height: calc(100vh - 80px);
       padding: 0 1rem;
     }
     .hero h1 {
@@ -101,7 +101,6 @@
   </style>
 </head>
 <body>
-
   <!-- NAVIGATION BAR -->
   <nav>
     <div class="nav-left">
@@ -113,7 +112,8 @@
       </div>
     </div>
     <div class="nav-right">
-      <a href="#demo" class="demo-btn">Get a Demo</a>
+      <!-- Updated button linking to "My Hub" page -->
+      <a href="/my_hub" class="demo-btn">My Hub</a>
     </div>
   </nav>
 
@@ -130,6 +130,5 @@
       <a href="#schedule" class="btn">Schedule a Demo</a>
     </div>
   </section>
-
 </body>
 </html>

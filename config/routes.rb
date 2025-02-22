@@ -11,7 +11,10 @@ Rails.application.routes.draw do
   Rails.application.routes.draw { resources :notes }
   Rails.application.routes.draw { resources :profiles }
 
-  # Define the root path route to your home controller's index action.
+  # Define the homepage route
   get "/", to: "home#index"
-  
+
+  # Add a route for "My Hub"
+  get "/my_hub", to: "my_hubs#index", as: :my_hub
+
 end

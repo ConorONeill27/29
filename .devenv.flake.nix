@@ -1,21 +1,19 @@
 {
   inputs =
     let
-      version = "1.4.0";
+      version = "1.3.1";
 system = "x86_64-linux";
-devenv_root = "/home/luke/Programs/group-29-hack-ireland";
+devenv_root = "/home/nixos/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
-devenv_tmpdir = "/run/user/1001";
-devenv_runtime = "/run/user/1001/devenv-8cd4d84";
+devenv_tmpdir = "/run/user/1000/";
+devenv_runtime = "/run/user/1000/devenv-a6ad6ae";
 devenv_istesting = false;
-devenv_direnvrc_latest_version = 1;
 
         in {
-        git-hooks.url = "github:cachix/git-hooks.nix";
-      git-hooks.inputs.nixpkgs.follows = "nixpkgs";
-      pre-commit-hooks.follows = "git-hooks";
+        pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+      pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
       nixpkgs.url = "github:cachix/devenv-nixpkgs/rolling";
       devenv.url = "github:cachix/devenv?dir=src/modules";
       } // (if builtins.pathExists (devenv_dotfile + "/flake.json")
@@ -24,16 +22,15 @@ devenv_direnvrc_latest_version = 1;
 
       outputs = { nixpkgs, ... }@inputs:
         let
-          version = "1.4.0";
+          version = "1.3.1";
 system = "x86_64-linux";
-devenv_root = "/home/luke/Programs/group-29-hack-ireland";
+devenv_root = "/home/nixos/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
-devenv_tmpdir = "/run/user/1001";
-devenv_runtime = "/run/user/1001/devenv-8cd4d84";
+devenv_tmpdir = "/run/user/1000/";
+devenv_runtime = "/run/user/1000/devenv-a6ad6ae";
 devenv_istesting = false;
-devenv_direnvrc_latest_version = 1;
 
             devenv =
             if builtins.pathExists (devenv_dotfile + "/devenv.json")
@@ -98,11 +95,6 @@ devenv_direnvrc_latest_version = 1;
               (pkgs.lib.optionalAttrs (container_name != null) {
                 container.isBuilding = pkgs.lib.mkForce true;
                 containers.${container_name}.isBuilding = true;
-              })
-              ({ options, ... }: {
-                config.devenv = pkgs.lib.optionalAttrs (builtins.hasAttr "direnvrcLatestVersion" options.devenv) {
-                  direnvrcLatestVersion = devenv_direnvrc_latest_version;
-                };
               })
             ] ++ (map importModule (devenv.imports or [ ])) ++ [
               ./devenv.nix
