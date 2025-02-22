@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gemini Chatbot</title>
+  <%= csrf_meta_tags %>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    #chat-container {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 5px;
+    }
+    #chat-log {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 15px;
+      background-color: #fafafa;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .user {
+      color: blue;
+    }
+    .bot {
+      color: green;
+    }
+    #user-input {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #send-button {
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat-log"></div>
+    <input type="text" id="user-input" placeholder="Type your message..." />
+    <button id="send-button">Send</button>
+  </div>
+
+  <script>
+    // DOM element references
+    const chatLog = document.getElementById('chat-log');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+
+    // Append a message to the chat log
+    function appendMessage(sender, text) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', sender);
+      messageDiv.textContent = sender === 'user' ? 'You: ' + text : 'Bot: ' + text;
+      chatLog.appendChild(messageDiv);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // Send a message to the Rails backend and display the response
+    async function sendMessage(message) {
+      appendMessage('user', message);
+      try {
+        const response = await fetch('/chat/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+          },
+          body: JSON.stringify({ message: message })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          appendMessage('bot', `Error: ${data.error}`);
+        } else {
+          appendMessage('bot', data.reply || 'No reply received.');
+        }
+      } catch (error) {
+        appendMessage('bot', `Error: ${error.message}`);
+      }
+    }
+
+    // Event listeners for sending a message via button click or Enter key
+    sendButton.addEventListener('click', () => {
+      const message = userInput.value.trim();
+      if (message) {
+        sendMessage(message);
+        userInput.value = '';
+      }
+    });
+
+    userInput.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') {
+        sendButton.click();
+      }
+    });
+  </script>
+</body>
+</html>
