@@ -7,6 +7,8 @@
     openssl.dev
     libffi
     zlib
+    libxml2.dev
+    libxslt.dev
   ];
 
   enterShell = ''
@@ -32,5 +34,5 @@
     listen_addresses = "127.0.0.1";
   };
 
-  processes.rails.exec = "rails server";
+  processes.rails.exec = "bin/rails server";
 }
