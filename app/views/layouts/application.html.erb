@@ -1,22 +1,135 @@
-this is my html file for homepage: <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "Group 29 Hack Ireland" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bundles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Example uses a Google Font. Replace with your own or system fonts if desired. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
-    <%= yield :head %>
+  <style>
+    /* GLOBAL STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0c0f17, #000); /* Dark gradient */
+      color: #fff;
+    }
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  </head>
+    /* NAVIGATION BAR */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: transparent; /* Allows gradient background to show through */
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-right: 2rem;
+    }
+    .nav-links a {
+      margin-right: 1.5rem;
+      text-decoration: none;
+      color: #ccc;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      color: #fff;
+    }
+    .demo-btn {
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border: 2px solid #5865f2; /* Purple-Blue accent */
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .demo-btn:hover {
+      background-color: #5865f2;
+    }
 
-  <body>
-    <%= yield %>
-  </body>
+    /* HERO SECTION */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100vh - 80px); /* subtract nav height */
+      padding: 0 1rem;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      max-width: 600px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      color: #ccc;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #fff;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">Bundles</div>
+      <div class="nav-links">
+        <a href="#solutions">Solutions</a>
+        <a href="#industries">Industries</a>
+        <a href="#about">About Us</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="#demo" class="demo-btn">Get a Demo</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Innovate Faster with Bundles</h1>
+    <p>
+      Empowering businesses with cutting-edge software solutions. 
+      From AI-driven analytics to seamless cloud integrations, 
+      we’re shaping the future of technology.
+    </p>
+    <div class="hero-buttons">
+      <a href="#explore" class="btn">Explore Solutions</a>
+      <a href="#schedule" class="btn">Schedule a Demo</a>
+    </div>
+  </section>
+
+</body>
 </html>
