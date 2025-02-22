@@ -1,7 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  nixpkgs-ruby,
+  ...
+}: {
   packages = with pkgs; [
     git
-    ruby_3_4
     pkg-config
     libyaml.dev
     openssl.dev
@@ -19,7 +22,7 @@
 
   languages.ruby = {
     enable = true;
-    package = pkgs.ruby_3_4;
+    package = nixpkgs-ruby.packages.${pkgs.system}."ruby-3.4.2";
   };
 
   services.postgres = {
