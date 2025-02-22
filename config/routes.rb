@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   Rails.application.routes.draw { resources :organizations }
   Rails.application.routes.draw { resources :notes }
+  Rails.application.routes.draw { resources :profiles }
 
   # Defines the root path route ("/")
   # root "posts#index"
