@@ -13,4 +13,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   root 'chat#index'
   post 'chat/message', to: 'chat#message'
+
+  post "chat/clear", to: "chat#clear"
+  post "chat/reimport", to: "chat#reimport"
 end
