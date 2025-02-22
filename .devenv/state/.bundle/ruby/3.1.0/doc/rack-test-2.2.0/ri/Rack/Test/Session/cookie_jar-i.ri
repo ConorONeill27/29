@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"cookie_jar:ETI"#Rack::Test::Session#cookie_jar;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"GThe Rack::Test::CookieJar for the cookies for the current session.;T:
+@fileI"lib/rack/test.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Rack::Test::Session;TcRDoc::NormalClass0

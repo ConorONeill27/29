@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"epilogue:ETI"Mail::Body#epilogue;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"^Returns and sets the epilogue as a string (any text that is after the last MIME boundary);T:
+@fileI"lib/mail/body.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Mail::Body;TcRDoc::NormalClass0

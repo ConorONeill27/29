@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"mailer_name:ETI"$ActionMailer::Base::mailer_name;TI"W;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I".Allows to set the name of current mailer.;T:
+@fileI"lib/action_mailer/base.rb;T:0@omit_headings_from_table_of_contents_below0T@I"ActionMailer::Base;TcRDoc::NormalClass0

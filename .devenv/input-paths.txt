@@ -1,0 +1,4 @@
+/home/luke/Programs/group-29-hack-ireland/.devenv.flake.nix
+/home/luke/Programs/group-29-hack-ireland/devenv.lock
+/home/luke/Programs/group-29-hack-ireland/devenv.nix
+/home/luke/Programs/group-29-hack-ireland/devenv.yaml

@@ -1,0 +1,89 @@
+have_func: checking for rb_category_warn()... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_category_warn; return !p; }
+/* end */
+
+--------------------
+
+have_var: checking for timezone in time.h with  -Werror... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC   -Werror -c conftest.c"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <time.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { const volatile void *volatile p; p = &(&timezone)[0]; return !p; }
+/* end */
+
+--------------------
+
+have_var: checking for altzone in time.h with  -Werror... -------------------- no
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC   -Werror -c conftest.c"
+conftest.c: In function ‘t’:
+conftest.c:16:55: error: ‘altzone’ undeclared (first use in this function)
+   16 | int t(void) { const volatile void *volatile p; p = &(&altzone)[0]; return !p; }
+      |                                                       ^~~~~~~
+conftest.c:16:55: note: each undeclared identifier is reported only once for each function it appears in
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <time.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { const volatile void *volatile p; p = &(&altzone)[0]; return !p; }
+/* end */
+
+--------------------
+

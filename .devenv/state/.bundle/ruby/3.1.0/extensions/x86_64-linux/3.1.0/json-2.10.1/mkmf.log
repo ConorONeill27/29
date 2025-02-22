@@ -1,0 +1,210 @@
+have_func: checking for rb_enc_interned_str() in ruby.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+conftest.c: In function ‘t’:
+conftest.c:16:57: error: ‘rb_enc_interned_str’ undeclared (first use in this function); did you mean ‘rb_interned_str’?
+   16 | int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_enc_interned_str; return !p; }
+      |                                                         ^~~~~~~~~~~~~~~~~~~
+      |                                                         rb_interned_str
+conftest.c:16:57: note: each undeclared identifier is reported only once for each function it appears in
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_enc_interned_str; return !p; }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: extern void rb_enc_interned_str();
+17: int t(void) { rb_enc_interned_str(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_hash_new_capa() in ruby.h... -------------------- no
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+conftest.c: In function ‘t’:
+conftest.c:16:57: error: ‘rb_hash_new_capa’ undeclared (first use in this function); did you mean ‘rb_ary_new_capa’?
+   16 | int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_hash_new_capa; return !p; }
+      |                                                         ^~~~~~~~~~~~~~~~
+      |                                                         rb_ary_new_capa
+conftest.c:16:57: note: each undeclared identifier is reported only once for each function it appears in
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_hash_new_capa; return !p; }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+/nix/store/bwkb907myixfzzykp21m9iczkhrq5pfy-binutils-2.43.1/bin/ld: /tmp/cc2PYXFG.o: in function `t':
+conftest.c:(.text+0x7): undefined reference to `rb_hash_new_capa'
+collect2: error: ld returned 1 exit status
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: extern void rb_hash_new_capa();
+17: int t(void) { rb_hash_new_capa(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_hash_bulk_insert() in ruby.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_hash_bulk_insert; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_category_warn() in ruby.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_category_warn; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for strnlen() in string.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <string.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))strnlen; return !p; }
+/* end */
+
+--------------------
+
+block in append_cflags: checking for whether -std=c99 is accepted as CFLAGS... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC  -std=c99 -Werror -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+--------------------
+

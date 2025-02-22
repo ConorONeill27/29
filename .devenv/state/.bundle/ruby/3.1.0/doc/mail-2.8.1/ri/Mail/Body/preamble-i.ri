@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"preamble:ETI"Mail::Body#preamble;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"`Returns and sets the preamble as a string (any text that is before the first MIME boundary);T:
+@fileI"lib/mail/body.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Mail::Body;TcRDoc::NormalClass0

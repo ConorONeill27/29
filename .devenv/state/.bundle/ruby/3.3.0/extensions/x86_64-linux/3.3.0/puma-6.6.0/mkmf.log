@@ -1,0 +1,232 @@
+pkg_config: checking for pkg-config for openssl... -------------------- ["-I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include ", "-L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib", "-lssl -lcrypto"]
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib pkg-config --exists openssl
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib pkg-config --libs openssl |
+=> "-L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib -lssl -lcrypto\n"
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lm -lpthread  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5 -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib pkg-config --cflags-only-I openssl |
+=> "-I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include\n"
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib pkg-config --cflags-only-other openssl |
+=> "\n"
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib pkg-config --libs-only-l openssl |
+=> "-lssl -lcrypto\n"
+package configuration for openssl
+incflags: -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include
+cflags: 
+ldflags: -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib
+libs: -lssl -lcrypto
+
+--------------------
+
+have_header: checking for openssl/bio.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC    -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <openssl/bio.h>
+/* end */
+
+--------------------
+
+have_func: checking for DTLS_method() in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))DTLS_method; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for SSL_CTX_set_session_cache_mode(NULL, 0) in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: 
+17: int t(void) { SSL_CTX_set_session_cache_mode(NULL, 0); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for TLS_server_method() in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))TLS_server_method; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for SSL_CTX_set_min_proto_version(NULL, 0) in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: 
+17: int t(void) { SSL_CTX_set_min_proto_version(NULL, 0); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for SSL_CTX_set_dh_auto(NULL, 0) in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: 
+17: int t(void) { SSL_CTX_set_dh_auto(NULL, 0); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for SSL_CTX_set_ciphersuites(NULL, "") in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: 
+17: int t(void) { char s1[1024]; SSL_CTX_set_ciphersuites(NULL, s1); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for SSL_get1_peer_certificate() in openssl/ssl.h... -------------------- yes
+
+LD_LIBRARY_PATH=.:/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib "gcc -o conftest -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/x86_64-linux -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0/ruby/backward -I/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/include/ruby-3.3.0 -I. -I/nix/store/73cqf7hqf4mwc3pbmgkpyl473bahn3s4-openssl-3.3.2-dev/include    -O3 -fPIC  conftest.c  -L. -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed -L/nix/store/k1dsk0zyq43pvi7f76is2rx6l4aphm5z-openssl-3.3.2/lib     -lssl -lcrypto -Wl,-rpath,/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -L/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/lib -lruby-3.3.5  -lssl -lcrypto -lm -lpthread  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <openssl/ssl.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     int (* volatile tp)(void)=(int (*)(void))&t;
+11:     printf("%d", (*tp)());
+12:   }
+13: 
+14:   return !!argv[argc];
+15: }
+16: int t(void) { void ((*volatile p)()); p = (void ((*)()))SSL_get1_peer_certificate; return !p; }
+/* end */
+
+--------------------
+

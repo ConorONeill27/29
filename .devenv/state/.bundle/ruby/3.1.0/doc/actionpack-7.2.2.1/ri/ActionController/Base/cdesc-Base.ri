@@ -1,0 +1,127 @@
+U:RDoc::NormalClass[iI"	Base:ETI"ActionController::Base;TI"
+Metal;To:RDoc::Markup::Document:@parts[o;;[4S:RDoc::Markup::Heading:
+leveli:	textI"Action Controller Base;To:RDoc::Markup::Paragraph;[I"TAction Controllers are the core of a web request in Rails. They are made up of
+one or more actions that are executed on request and then either it renders a
+template or redirects to another action. An action is defined as a public
+method on the controller, which will automatically be made accessible to the
+web-server through Rails Routes.;To;;[I"-By default, only the ApplicationController in a Rails application inherits
+from <code>ActionController::Base</code>. All other controllers inherit from
+ApplicationController. This gives you one class to configure things such as
+request forgery protection and filtering of sensitive request parameters.;To;;[I".A sample controller could look like this:;To:RDoc::Markup::Verbatim;[I"3class PostsController < ApplicationController
+;TI"  def index
+;TI"    @posts = Post.all
+;TI"  end
+;TI"
+;TI"  def create
+;TI"+    @post = Post.create params[:post]
+;TI"     redirect_to posts_path
+;TI"  end
+;TI"	end
+;T:@format0o;;[I"xActions, by default, render a template in the <code>app/views</code> directory
+corresponding to the name of the controller and action after executing code in
+the action. For example, the <code>index</code> action of the PostsController would
+render the template <code>app/views/posts/index.html.erb</code> by default after
+populating the <code>@posts</code> instance variable.;To;;[I"Unlike index, the create action will not render a template. After performing
+its main purpose (creating a new post), it initiates a redirect instead. This
+redirect works by returning an external <code>302 Moved</code> HTTP response that takes
+the user to the index action.;To;;[I"¶These two methods represent the two basic action archetypes used in Action
+Controllers: Get-and-show and do-and-redirect. Most actions are variations on
+these themes.;TS;	;
+i;I"Requests;To;;[I"tFor every request, the router determines the value of the <code>controller</code> and
+<code>action</code> keys. These determine which controller and action are called. The
+remaining request parameters, the session (if one is available), and the full
+request with all the HTTP headers are made available to the action through
+accessor methods. Then the action is performed.;To;;[I"sThe full request object is available via the request accessor and is primarily
+used to query for HTTP headers:;To;;[	I"def server_ip
+;TI"-  location = request.env["REMOTE_ADDR"]
+;TI"9  render plain: "This server hosted at #{location}"
+;TI"	end
+;T;0S;	;
+i;I"Parameters;To;;[I"vAll request parameters, whether they come from a query string in the URL or
+form data submitted through a POST request are available through the <code>params</code>
+method which returns a hash. For example, an action that was performed through
+<code>/posts?category=All&limit=5</code> will include <code>{ "category" => "All", "limit" =>
+"5" }</code> in <code>params</code>.;To;;[I"sIt's also possible to construct multi-dimensional parameter hashes by
+specifying keys using brackets, such as:;To;;[I"9<input type="text" name="post[name]" value="david">
+;TI"A<input type="text" name="post[address]" value="hyacintvej">
+;T;0o;;[I"wA request coming from a form holding these inputs will include <code>{ "post" => {
+"name" => "david", "address" => "hyacintvej" } }</code>. If the address input had
+been named <code>post[address][street]</code>, the <code>params</code> would have included <code>{ "post"
+=> { "address" => { "street" => "hyacintvej" } } }</code>. There's no limit to the
+depth of the nesting.;TS;	;
+i;I"Sessions;To;;[I"Sessions allow you to store objects in between requests. This is useful for
+objects that are not yet ready to be persisted, such as a Signup object
+constructed in a multi-paged process, or objects that don't change much and
+are needed all the time, such as a User object for a system that requires
+login. The session should not be used, however, as a cache for objects where
+it's likely they could be changed unknowingly. It's usually too much work to
+keep it all synchronized -- something databases already excel at.;To;;[I"jYou can place objects in the session by using the <code>session</code> method, which
+accesses a hash:;To;;[I"Asession[:person] = Person.authenticate(user_name, password)
+;T;0o;;[I"5You can retrieve it again through the same hash:;To;;[I"!"Hello #{session[:person]}"
+;T;0o;;[I"cFor removing objects from the session, you can either assign a single key to
+<code>nil</code>:;To;;[I"$# removes :person from session
+;TI"session[:person] = nil
+;T;0o;;[I"Jor you can remove the entire session with <code>reset_session</code>.;To;;[I"BBy default, sessions are stored in an encrypted browser cookie (see
+ActionDispatch::Session::CookieStore). Thus the user will not be able to read
+or edit the session data. However, the user can keep a copy of the cookie even
+after it has expired, so you should avoid storing sensitive information in
+cookie-based sessions.;TS;	;
+i;I"Responses;To;;[I"ÎEach action results in a response, which holds the headers and document to be
+sent to the user's browser. The actual response object is generated
+automatically through the use of renders and redirects and requires no user
+intervention.;TS;	;
+i;I"Renders;To;;[I"UAction Controller sends content to the user by using one of five rendering
+methods. The most versatile and common is the rendering of a template.
+Included in the Action Pack is the Action View, which enables rendering of ERB
+templates. It's automatically configured. The controller passes objects to the
+view by assigning instance variables:;To;;[I"def show
+;TI"&  @post = Post.find(params[:id])
+;TI"	end
+;T;0o;;[I"8Which are then automatically available to the view:;To;;[I"Title: <%= @post.title %>
+;T;0o;;[I"®You don't have to rely on the automated rendering. For example, actions that
+could result in the rendering of different templates will use the manual
+rendering methods:;To;;[I"def search
+;TI".  @results = Search.find(params[:query])
+;TI"  case @results.count
+;TI"1    when 0 then render action: "no_results"
+;TI"+    when 1 then render action: "show"
+;TI"4    when 2..10 then render action: "show_many"
+;TI"  end
+;TI"	end
+;T;0o;;[I"KRead more about writing ERB and Builder templates in ActionView::Base.;TS;	;
+i;I"Redirects;To;;[I"íRedirects are used to move from one action to another. For example, after a
+<code>create</code> action, which stores a blog entry to the database, we might like to
+show the user the new entry. Because we're following good DRY principles
+(Don't Repeat Yourself), we're going to reuse (and redirect to) a <code>show</code>
+action that we'll assume has already been created. The code might look like
+this:;To;;[I"def create
+;TI"*  @entry = Entry.new(params[:entry])
+;TI"  if @entry.save
+;TI";    # The entry was saved correctly, redirect to show
+;TI"3    redirect_to action: 'show', id: @entry.id
+;TI"  else
+;TI"7    # things didn't go so well, do something else
+;TI"  end
+;TI"	end
+;T;0o;;[I"oIn this case, after saving our new entry to the database, the user is
+redirected to the <code>show</code> method, which is then executed. Note that this is an
+external HTTP-level redirection which will cause the browser to make a second
+request (a GET to the show action), and not some internal re-routing which
+calls both "create" and then "show" within one request.;To;;[I"jLearn more about <code>redirect_to</code> and what options you have in
+ActionController::Redirecting.;TS;	;
+i;I"*Calling multiple redirects or renders;To;;[I"ÇAn action may perform only a single render or a single redirect. Attempting to
+do either again will result in a DoubleRenderError:;To;;[	I"def do_something
+;TI"'  redirect_to action: "elsewhere"
+;TI"=  render action: "overthere" # raises DoubleRenderError
+;TI"	end
+;T;0o;;[I"kIf you need to redirect on the condition of something, then be sure to add
+"return" to halt execution.;To;;[I"def do_something
+;TI"  if monkeys.nil?
+;TI"*    redirect_to(action: "elsewhere")
+;TI"    return
+;TI"  end
+;TI"F  render action: "overthere" # won't be called if monkeys is nil
+;TI"	end
+;T;0:
+@fileI""lib/action_controller/base.rb;T:0@omit_headings_from_table_of_contents_below0;0;0[ [U:RDoc::Constant[i I"MODULES;TI"$ActionController::Base::MODULES;T:public0o;;[ ;@∂;0@∂@cRDoc::NormalClass0U;[i I"PROTECTED_IVARS;TI",ActionController::Base::PROTECTED_IVARS;T;0o;;[o;;[I"NDefine some internal variables that should not be propagated to the view.;T;@∂;0@∂@@ø0[ [[I"
+class;T[[;[[I"without_modules;TI""lib/action_controller/base.rb;T[:protected[ [:private[ [I"instance;T[[;[ [;[ [;[[I"_protected_ivars;T@“[ [U:RDoc::Context::Section[i 0o;;[ ;0;0[@∂I"ActionController;TcRDoc::NormalModule

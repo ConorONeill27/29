@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"content_type:ETI"*Rack::Test::UploadedFile#content_type;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I",The content type of the "uploaded" file;T:
+@fileI"#lib/rack/test/uploaded_file.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Rack::Test::UploadedFile;TcRDoc::NormalClass0

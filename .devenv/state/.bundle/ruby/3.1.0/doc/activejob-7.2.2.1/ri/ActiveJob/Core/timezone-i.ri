@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"timezone:ETI"ActiveJob::Core#timezone;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"(Timezone to be used during the job.;T:
+@fileI"lib/active_job/core.rb;T:0@omit_headings_from_table_of_contents_below0F@I"ActiveJob::Core;TcRDoc::NormalModule0
