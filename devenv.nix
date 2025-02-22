@@ -12,6 +12,7 @@
     zlib
     libxml2.dev
     libxslt.dev
+    libxcrypt
   ];
 
   enterShell = ''

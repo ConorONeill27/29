@@ -1,0 +1,15 @@
+ <table>
+  <tr>
+    <th>Title</th>
+    <th>Body</th>
+  </tr>
+   <% @notes.each do |note| %>
+     <tr>
+        <td>
+          <a href="/notes/<%= note.id %>"><%= note.title %></a>
+          <%= shorten(note.body) %>
+        </td>
+      </tr>
+    <% end %>
+  <tr>
+</table> 

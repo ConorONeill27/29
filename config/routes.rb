@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   post "/organizations", to: "organizations#create"
   get "/organizations/:id", to: "organizations#show"
 
+  get "/notes", to: "notes#index"
+  get "/notes/:id", to: "notes#by_id"
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
