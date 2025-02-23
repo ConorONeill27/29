@@ -12,7 +12,7 @@
   <!-- vis-network & Compromise for visualization -->
   <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   <script src="https://unpkg.com/compromise"></script>
-
+  
   <style>
     /* GLOBAL STYLES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,7 +24,7 @@
       overflow-x: hidden;
     }
 
-    /* FIXED TOP NAVIGATION BAR */
+    /* TOP NAVIGATION */
     .top-nav {
       position: fixed;
       top: 0; left: 0;
@@ -36,11 +36,6 @@
       padding: 0 2rem;
       background-color: #14161c;
       z-index: 100;
-    }
-    .top-nav .logo { 
-      font-size: 1.5rem; 
-      font-weight: 700; 
-      color: #fff; 
     }
     .top-nav .nav-links a, .top-nav .actions a {
       margin-right: 1.5rem;
@@ -61,10 +56,9 @@
     }
     .nav-btn:hover { background-color: #5865f2; }
 
-    /* CONTENT STRUCTURE */
+    /* MAIN CONTENT STRUCTURE */
     .content {
       display: flex;
-      flex: 1;
       padding-top: 60px; /* space for fixed nav */
       height: calc(100vh - 60px);
     }
@@ -75,7 +69,6 @@
       background-color: #14161c;
       padding: 1rem;
       overflow-y: auto;
-      height: 100%;
     }
     .sidebar h2 { font-size: 1.2rem; margin-bottom: 1rem; }
     .sidebar ul { list-style: none; }
@@ -83,16 +76,20 @@
     .sidebar a { text-decoration: none; color: #aaa; transition: color 0.2s ease; }
     .sidebar a:hover { color: #fff; }
 
-    /* MAIN CONTENT AREA (Grid Cards) */
-    .main-content {
+    /* MAIN AREA (Employee Cards & Graph) */
+    .main-area {
       flex: 1;
-      padding: 1rem 2rem;
-      overflow-y: auto;
-      position: relative;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      flex-direction: row;
+      gap: 1rem;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    /* LEFT SECTION: Employee Cards */
+    .left-section {
+      flex: 1;
+      background: transparent;
+      position: relative;
     }
     .grid-background::before {
       content: "";
@@ -109,6 +106,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1rem;
+      position: relative;
       z-index: 2;
     }
     .card {
@@ -121,22 +119,20 @@
       text-align: center;
     }
     .card:hover { background-color: #2a2f3a; transform: translateY(-2px); }
-    .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .card-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
     .card-title { font-weight: 600; margin-bottom: 0.5rem; }
     .card-desc { font-size: 0.9rem; color: #ccc; }
 
-    /* CENTERED GRAPH SECTION */
-    .graph-section-wrapper {
-      display: flex;
+    /* RIGHT SECTION: Graph */
+    .right-section {
       flex: 1;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-    #graph-section {
-      width: 85%;
-      height: 80vh;
-      background: #1a1f2a;
+      background-color: #1a1f2a;
       border: 1px solid #34495e;
       border-radius: 10px;
       padding: 20px;
@@ -144,10 +140,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      position: relative;
     }
-    #graph-section::before {
+    .right-section::before {
       content: "";
       position: absolute;
       top: 0; left: 0;
@@ -158,22 +152,17 @@
       opacity: 0.2;
       z-index: -1;
     }
-    .card-avatar {
-  width: 70px;       /* Adjust size as needed */
-  height: 70px;      /* Adjust size as needed */
-  border-radius: 50%; /* Makes the image circular */
-  object-fit: cover;  /* Ensures the image fills the container */
-  margin-bottom: 10px;
-}
-
-    #network {
+    #controls {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #14161c;
+      border: 1px solid #34495e;
+      border-radius: 4px;
       width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      background: #20252f;
-      border: 2px solid #5865f2;
-      margin-top: 20px;
+      color: #fff;
+      text-align: center;
     }
+    #controls label { font-weight: bold; margin-right: 10px; }
     #fullscreenButton {
       margin-top: 15px;
       padding: 10px 20px;
@@ -184,13 +173,36 @@
       cursor: pointer;
     }
     #fullscreenButton:hover { background-color: #4752d0; }
+    /* Network box with fixed height */
+    #network {
+      width: 100%;
+      height: 400px;
+      border-radius: 10px;
+      background: #20252f;
+      border: 2px solid #5865f2;
+      margin-top: 20px;
+      flex-shrink: 0;
+    }
     #legend {
       margin-top: 10px;
       font-size: 14px;
       color: #6c757d;
     }
+    /* Text box beneath the network */
+    #graph-textbox {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #5865f2;
+      background-color: #14161c;
+      color: #fff;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
 
-    /* CHATBOX */
+    /* CHATBOX (remains fixed at bottom right) */
     #chat-container {
       position: fixed;
       bottom: 20px;
@@ -203,7 +215,7 @@
       z-index: 200;
     }
     #chat-log { 
-      height: 250px; 
+      height: 100px; 
       overflow-y: auto; 
       padding: 10px; 
       background-color: #20252f; 
@@ -345,7 +357,7 @@
     </section>
   </div>
 
-  <!-- CHATBOX SECTION -->
+  <!-- CHATBOX SECTION (fixed) -->
   <div id="chat-container">
     <div id="chat-log"></div>
     <input type="text" id="user-input" placeholder="Ask me something...">
@@ -354,61 +366,14 @@
     <button id="microphone-button-off">🔇</button>
   </div>
 
-
+  <!-- SCRIPTS -->
   <script>
-    // Chatbox script
-    const chatLog = document.getElementById('chat-log');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-
-    function writeLine(text) {
-      const messageDiv = document.createElement('div');
-      messageDiv.textContent = text;
-      chatLog.appendChild(messageDiv);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    function appendMessage(sender, text) {
-      writeLine(`${sender === 'user' ? 'You' : 'Bot'}: ${text}`);
-    }
-
-    async function sendMessage(message) {
-      appendMessage('user', message);
-      try {
-        const response = await fetch('/my_hub/chat_message', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-          },
-          body: JSON.stringify({ message: message })
-        });
-        const data = await response.json();
-        appendMessage('bot', data.reply || 'No reply received.');
-      } catch (error) {
-        appendMessage('bot', `Error: ${error.message}`);
-      }
-    }
-
-    sendButton.addEventListener('click', () => {
-      const message = userInput.value.trim();
-      if (message) {
-        sendMessage(message);
-        userInput.value = '';
-      }
-    });
-
-    userInput.addEventListener('keyup', (event) => {
-      if (event.key === 'Enter') sendButton.click();
-    });
-  </script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
+    // Global variables for classifier and network
+    const candidateLabels = ["Technology", "Business", "Health", "Science", "Education", "Sports", "Politics", "Entertainment"];
     const baseFontSize = 24;
     const maxFontSize = 48;
 
-    // Fullscreen button functionality
+    // Fullscreen toggle for network graph
     document.getElementById('fullscreenButton').addEventListener('click', () => {
       const networkContainer = document.getElementById('network');
       if (!document.fullscreenElement) {
@@ -434,15 +399,75 @@
       }
     });
 
-    // Automatically load graph data from the server endpoint
-    async function loadGraphData() {
-      try {
-        const response = await fetch('<%= my_hub_graph_data_path %>');
-        if (!response.ok) {
-          console.error("Failed to load graph data:", response.statusText);
-          return;
+    // Extract proper nouns using Compromise
+    function extractProperNouns(text, topN = 5) {
+      const doc = nlp(text);
+      let personNames = doc.people().out('array');
+      let properNouns = doc.match('#ProperNoun').out('array').filter(noun => {
+        return !personNames.some(fullName => fullName.includes(noun));
+      });
+      let combined = personNames.concat(properNouns);
+      const counts = {};
+      combined.forEach(word => {
+        word = word.trim();
+        if (word.length > 2) {
+          counts[word] = (counts[word] || 0) + 1;
         }
-        const results = await response.json();
+      });
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      let keywords = entries.slice(0, topN).map(entry => ({ keyword: entry[0], count: entry[1] }));
+      if (keywords.length === 0) { 
+        keywords = [{ keyword: "Uncategorized", count: 1 }]; 
+      }
+      return keywords;
+    }
+
+    // Classify text using Hugging Face's zero-shot classification API
+    async function classifyText(text) {
+      const apiUrl = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli";
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            inputs: text,
+            parameters: { candidate_labels: candidateLabels }
+          })
+        });
+        if (!response.ok) {
+          console.error("API response error:", response.statusText);
+          return "";
+        }
+        const result = await response.json();
+        if (result && result.labels && result.labels.length > 0) {
+          return result.labels[0];
+        }
+      } catch (err) {
+        console.error("Classification error:", err);
+      }
+      return "";
+    }
+
+    // Handle file input changes (table update removed)
+    document.getElementById('fileInput').addEventListener('change', event => {
+      const files = event.target.files;
+      const promises = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const promise = new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const content = e.target.result;
+            const keywords = extractProperNouns(content);
+            const classification = await classifyText(content);
+            resolve({ name: file.name, keywords, classification });
+          };
+          reader.onerror = reject;
+          reader.readAsText(file);
+        });
+        promises.push(promise);
+      }
+      Promise.all(promises).then(results => {
         const globalFreq = {};
         results.forEach(doc => {
           doc.keywords.forEach(obj => {
@@ -453,29 +478,11 @@
         results.forEach(doc => {
           doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
         });
-        updateTable(results);
         buildNetwork(results, globalFreq);
-      } catch (error) {
-        console.error("Error loading graph data:", error);
-      }
-    }
-
-    // Update the HTML table with document details.
-    function updateTable(docs) {
-      let html = '<table><thead><tr><th>File Name</th><th>Proper Noun Keywords</th><th>Tags</th><th>Classification</th></tr></thead><tbody>';
-      docs.forEach(doc => {
-        const keywordText = doc.keywords.map(obj => obj.keyword).join(', ');
-        html += `<tr>
-                   <td>${doc.name}</td>
-                   <td>${keywordText}</td>
-                   <td>${doc.tags.join(', ') || 'None'}</td>
-                   <td>${doc.classification}</td>
-                 </tr>`;
       });
-      html += '</tbody></table>';
-      document.getElementById('tableContainer').innerHTML = html;
-    }
+    });
 
+    // Fade in nodes
     function fadeIn(nodeId, nodes) {
       let opacity = 0, step = 0.1;
       const interval = setInterval(() => {
@@ -485,12 +492,14 @@
       }, 50);
     }
 
+    // Build the network graph using vis-network
     function buildNetwork(docs, globalFreq) {
       const nodes = new vis.DataSet([]);
       const edges = new vis.DataSet([]);
       const keywordNodes = {};
       const classificationNodes = {};
       let docId = 1, kwId = 1001, clsId = 2001;
+
       docs.forEach(doc => {
         const currentDocId = docId++;
         nodes.add({ 
@@ -534,7 +543,6 @@
             width: 1 + Math.log(count + 1)
           });
         });
-        
         let cls = doc.classification || "";
         if (!(cls in classificationNodes)) {
           classificationNodes[cls] = clsId;
@@ -554,6 +562,7 @@
         }
         edges.add({ from: currentDocId, to: classificationNodes[cls], width: 1 });
       });
+
       const container = document.getElementById('network');
       const data = { nodes: nodes, edges: edges };
       const options = {
@@ -573,6 +582,7 @@
         interaction: { hover: true }
       };
       const network = new vis.Network(container, data, options);
+
       let scheduledUpdate = false;
       let pendingScale = network.getScale();
       function scheduleUpdate(scale) {
@@ -615,33 +625,6 @@
           : "";
       });
     }
-
-    // Automatically load graph data from the server endpoint
-    loadGraphData();
-    async function loadGraphData() {
-      try {
-        const response = await fetch('<%= my_hub_graph_data_path %>');
-        if (!response.ok) {
-          console.error("Failed to load graph data:", response.statusText);
-          return;
-        }
-        const results = await response.json();
-        const globalFreq = {};
-        results.forEach(doc => {
-          doc.keywords.forEach(obj => {
-            const kw = obj.keyword;
-            globalFreq[kw] = (globalFreq[kw] || 0) + 1;
-          });
-        });
-        results.forEach(doc => {
-          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
-        });
-        updateTable(results);
-        buildNetwork(results, globalFreq);
-      } catch (error) {
-        console.error("Error loading graph data:", error);
-      }
-    }
-  });
-</script>
-
+  </script>
+</body>
+</html>

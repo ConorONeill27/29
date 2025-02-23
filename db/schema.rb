@@ -61,8 +61,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
 
   create_table "notebooks", force: :cascade do |t|
     t.string "title"
+    t.bigint "owner_id"
+    t.bigint "organization_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_notebooks_on_organization_id"
+    t.index ["owner_id"], name: "index_notebooks_on_owner_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -120,6 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "notebook_memberships", "notebooks"
   add_foreign_key "notebook_memberships", "users"
+  add_foreign_key "notebooks", "organizations"
+  add_foreign_key "notebooks", "users", column: "owner_id"
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
   add_foreign_key "sessions", "users"
