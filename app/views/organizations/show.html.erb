@@ -1,1 +1,128 @@
-<p> <%= @organization.name %> </p>
+<div class="centered-container">
+  <div class="organization-container">
+    <h2>🏢 <%= @organization.name %></h2>
+
+    <% if @organization.users.empty? %>
+      <p class="empty-message">No members in this organization yet.</p>
+    <% else %>
+      <table class="organization-table">
+        <thead>
+          <tr>
+            <th>User Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @organization.users.each do |user| %>
+            <tr>
+              <td>
+                <%= link_to user.email_address, profile_path(user), class: "organization-link", data: { turbo: false } %>
+              </td>
+              <td class="actions">
+                <%= button_to "🗑 Remove User", remove_user_organizations_path(oid: @organization.id, uid: user.id), method: :delete, class: "delete-btn", data: { turbo_confirm: "Are you sure?" } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+<style>
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full-page Centering */
+.centered-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  text-align: center;
+  background-color: #0c0f17;
+}
+
+/* Card-style Container */
+.organization-container {
+  width: 100%;
+  max-width: 800px;
+  background: #1a1f2a;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Header */
+.organization-container h2 {
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* Empty Message */
+.empty-message {
+  color: #bbb;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Table Styling */
+.organization-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.organization-table thead {
+  background-color: #5865f2;
+  color: white;
+}
+
+.organization-table th, .organization-table td {
+  padding: 12px;
+  border-bottom: 1px solid #2c3445;
+}
+
+.organization-table tr:hover {
+  background-color: #222834;
+}
+
+/* Links */
+.organization-link {
+  color: #8ab4f8;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.organization-link:hover {
+  text-decoration: underline;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-btn {
+  padding: 8px 8px;
+  text-decoration: none;
+  font-size: 14px;
+  background-color: #dc3545;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 10px;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+</style>

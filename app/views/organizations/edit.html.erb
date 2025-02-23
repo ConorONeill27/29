@@ -1,10 +1,103 @@
-<%= form_with(model: @organization, local: true) do |form| %>
-  <div>
-    <%= form.label :name %>
-    <%= form.text_field :name, placeholder: @organization.name  %>
-  </div>
+<div class="centered-container">
+  <div class="form-container">
+    <h2>🏢 Edit Organization</h2>
 
-  <div>
-    <%= form.submit "Update Organization" %>
+    <%= form_with(model: @organization, local: true, class: "styled-form") do |form| %>
+      <div class="form-group">
+        <%= form.label :name, class: "form-label" %>
+        <%= form.text_field :name, class: "form-input", placeholder: @organization.name %>
+      </div>
+
+      <div class="form-group">
+        <%= form.submit "Update Organization", class: "submit-btn" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
+
+<style>
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full-page Centering */
+.centered-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  text-align: center;
+  background-color: #0c0f17;
+}
+
+/* Form Container */
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  background: #1a1f2a;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Header */
+.form-container h2 {
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* Form Styling */
+.styled-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Labels */
+.form-label {
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+/* Input Fields */
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333a48;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #1f2833;
+  color: #ffffff;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #5865f2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #4752d0;
+}
+</style>

@@ -33,7 +33,11 @@ Rails.application.routes.draw do
   post "/my_hub/message", to: "my_hubs#message"
   get "/my_hubs/graph_data", to: "my_hubs#graph_data", as: :my_hub_graph_data
 
-  resources :organizations
+  resources :organizations do
+    collection do
+      delete "/:oid/:uid", to: "organizations#remove_user", as: :remove_user
+    end
+  end
   resources :notes do
     collection { get "download", to: "notes#download", as: :download }
   end

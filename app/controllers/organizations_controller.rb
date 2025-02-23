@@ -17,9 +17,12 @@ class OrganizationsController < ApplicationController
 
   def create
     @organization = Organization.new(organization_params)
-    if @organization.save
+    @organization.users << @current_user
+    @current_user.organizations << @organization
+
+    if @organization.save && @current_user.save
       redirect_to @organization,
-                  notice: "Organization was successfully created."
+        notice: "Organization was successfully created."
     else
       render :new
     end
@@ -29,7 +32,7 @@ class OrganizationsController < ApplicationController
     @organization = Organization.find(params[:id])
     if @organization.update(organization_params)
       redirect_to @organization,
-                  notice: "Organization was successfully updated."
+        notice: "Organization was successfully updated."
     else
       render :edit
     end
@@ -38,13 +41,23 @@ class OrganizationsController < ApplicationController
   def destroy
     @organization = Organization.find(params[:id])
     @organization.destroy
-    redirect_to organization_url,
-                notice: "Organization was successfully destroyed."
+    redirect_to organizations_url,
+      notice: "Organization was successfully destroyed."
+  end
+
+  def remove_user
+    organization = Organization.find(params[:oid])
+    user = User.find(params[:uid])
+
+    organization.users.delete(user)
+    user.organizations.delete(organization)
+
+    redirect_to organizations_url, notice: "User was successfully removed."
   end
 
   private
 
   def organization_params
-    params.require(:organization).permit(:name)
+    params.require(:organization).permit(:name).permit(:oid).permit(:uid)
   end
 end

@@ -1,7 +1,152 @@
-<div id="organizations">
- <% @organizations.each do |organization| %>
-    <div>
-      <%= organization.name %>
+<div class="centered-container">
+  <div class="organizations-container">
+    <h2>📂 Your Organizations</h2>
+
+    <% if @organizations.empty? %>
+      <p class="empty-message">You are not a member of any organizations yet.</p>
+    <% else %>
+      <table class="organization-table">
+        <thead>
+          <tr>
+            <th>Organization Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @organizations.each do |organization| %>
+            <tr>
+              <td>
+                <%= link_to organization.name, organization_path(organization), class: "organization-link", data: { turbo: false } %>
+              </td>
+              <td class="actions">
+                <%= link_to "✏️ Edit", edit_organization_path(organization), class: "edit-btn", data: { turbo: false } %>
+                <%= link_to "🗑 Delete", organization_path(organization), method: :delete, class: "delete-btn", data: { turbo_confirm: "Are you sure?", turbo: false } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <div class="create-org">
+      <%= link_to "+ Create New Organization", new_organization_path, class: "create-btn", data: { turbo: false } %>
     </div>
-  <% end %>
+  </div>
 </div>
+
+<style>
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full-page Centering */
+.centered-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  text-align: center;
+  background-color: #0c0f17;
+}
+
+/* Card-style Container */
+.organizations-container {
+  width: 100%;
+  max-width: 800px;
+  background: #1a1f2a;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Header */
+.organizations-container h2 {
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* Empty Message */
+.empty-message {
+  color: #bbb;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Table Styling */
+.organization-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.organization-table thead {
+  background-color: #5865f2;
+  color: white;
+}
+
+.organization-table th, .organization-table td {
+  padding: 12px;
+  border-bottom: 1px solid #2c3445;
+}
+
+.organization-table tr:hover {
+  background-color: #222834;
+}
+
+/* Links */
+.organization-link {
+  color: #8ab4f8;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.organization-link:hover {
+  text-decoration: underline;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Create Organization Button */
+.create-org {
+  margin-top: 20px;
+}
+
+.create-btn {
+  display: inline-blo
