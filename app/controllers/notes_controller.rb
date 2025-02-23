@@ -1,12 +1,14 @@
 class NotesController < ApplicationController
-  before_action :set_notebooks
-
   def index
-    @notes = @notebooks&.notes&.flatten&.uniq
+    @notes =
+      @current_user&.organizations&.includes(:notes)&.flat_map(&:notes)&.uniq
   end
 
   def show
-    @note = @notebook.notes.find(params[:id])
+    @note = Note.find(params[:id])
+
+    @notes =
+      @current_user&.organizations&.includes(:notes)&.flat_map(&:notes)&.uniq
   end
 
   def download
@@ -19,13 +21,18 @@ class NotesController < ApplicationController
   end
 
   def new
-    @note = @notebook.notes.build
+    @note = Note.new
   end
 
   def create
-    @note = @notebook.notes.build(note_params)
+    # Find the organization by its ID from params
+    organization = Organization.find(params[:note][:organization_id])
+
+    # Create a new note and associate it with the organization
+    @note = organization.notes.new(note_params)
+
     if @note.save
-      redirect_to [@notebook, @note], notice: "Note was successfully created."
+      redirect_to @note, notice: "Note was successfully created."
     else
       render :new
     end
@@ -34,7 +41,13 @@ class NotesController < ApplicationController
   private
 
   def edit
+    Rails.logger.debug("params: " + params[:id])
+    Rails.logger.debug("note: " + Note.find(params[:id]))
+
     @note = Note.find(params[:id])
+
+    @notes =
+      @current_user&.organizations&.includes(:notes)&.flat_map(&:notes)&.uniq
   end
 
   def update
@@ -54,11 +67,7 @@ class NotesController < ApplicationController
 
   private
 
-  def set_notebooks
-    @notebooks = current_user.notebooks
-  end
-
   def note_params
-    params.require(:note).permit(:title, :body)
+    params.require(:note).permit(:title, :body, :organization_id)
   end
 end

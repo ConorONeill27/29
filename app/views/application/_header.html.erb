@@ -1,10 +1,9 @@
-<!-- NAVIGATION BAR -->
 <nav>
   <div class="nav-left">
     <a class="logo" href="/">Bundles</a>
     <div class="nav-links">
       <%= link_to "Organizations", organizations_path(), data: { turbo: false } %>
-      <%= link_to "Industries", root_path(anchor: "industries"), data: { turbo: false } %>
+      <%= link_to "Notes", notes_path(), data: { turbo: false } %>
       <%= link_to "About Us", about_us_path, data: { turbo: false } %>
     </div>
   </div>

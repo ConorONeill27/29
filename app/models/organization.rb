@@ -1,6 +1,5 @@
 class Organization < ApplicationRecord
   validates :name, presence: true
-  has_many :notebooks
-  has_many :organization_memberships, dependent: :destroy
-  has_many :users, through: :organization_memberships
+  has_and_belongs_to_many :users
+  has_many :notes
 end

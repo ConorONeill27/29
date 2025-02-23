@@ -1,39 +1,137 @@
-<%= form_with(model: @note, local: true) do |form| %>
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title, placeholder: @note.title  %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="<%= csrf_meta_tags %>">
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Editor.md -->
+  <script src="https://cdn.jsdelivr.net/npm/zepto/dist/zepto.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/editor.md/editormd.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md/css/editormd.min.css" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0c0f17;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      text-align: center;
+      padding: 1.5rem 0;
+      background-color: #14161c;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      background-color: #1a1f2a;
+      gap: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-input {
+      padding: 0.6rem;
+      width: 300px;
+      border-radius: 6px;
+      border: none;
+      background-color: #1f2833;
+      color: #fff;
+    }
+
+    .submit-btn, .clear-btn {
+      padding: 0.7rem 1.4rem;
+      background-color: #5865f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover { background-color: #4752d0; }
+    .clear-btn { background-color: #dc3545; }
+    .clear-btn:hover { background-color: #c82333; }
+
+    #markdown-editor { width: 100%; height: 55vh; background-color: #1a1f2a; }
+    .editormd { background-color: #1a1f2a !important; color: #fff !important; }
+
+  </style>
+</head>
+
+<body>
+  <div class="header"> ✏️ Edit Note </div>
+
+  <%= form_with(model: @note, url: notes_path(@note), local: true, class: "toolbar", id: "note-form") do |form| %>
+    <div class="form-group">
+      <%= form.label :organization_id, "Select Organization", class: "form-label" %>
+      <%= form.collection_select :organization_id, @current_user.organizations, :id, :name, { prompt: "Choose an Organization" }, class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :title, "Note Title", class: "form-label" %>
+      <%= form.text_field :title, placeholder: "Enter note title...", class: "form-input", id: "note-title", value: @note.title %>
+    </div>
+
+    <%= form.hidden_field :body, id: "note-body" %>
+
+    <div class="form-group">
+      <%= form.submit "💾 Save Changes", class: "submit-btn" %>
+      <button type="button" onclick="clearEditor()" class="clear-btn">🧹 Clear</button>
+      <%= link_to "← Back to Notes", notes_path, class: "back-btn" %>
+    </div>
+  <% end %>
+
+  <div id="markdown-editor">
+    <textarea style="display:none;"><%= @note.body %></textarea>
   </div>
 
-  <div>
-    <%= form.label :body %>
-    <%= form.text_area :body, placeholder: @note.body %>
-  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var editor = editormd("markdown-editor", {
+        width: "100%",
+        height: "100%",
+        path: "https://cdn.jsdelivr.net/npm/editor.md/lib/",
+        saveHTMLToTextarea: true,
+        emoji: true,
+        taskList: true,
+        tex: true,
+        flowChart: true,
+        theme: "dark",
+        previewTheme: "dark",
+        editorTheme: "pastel-on-dark"
+      });
 
-    <%= form_with model: @post do |form| %>
-    <%= form.label :content %>
-    <%= marksmith_tag form, :content %>
-    <%= form.submit %>
+      // Auto-update the hidden field before form submission
+      document.getElementById("note-form").addEventListener("submit", function(event) {
+        document.getElementById("note-body").value = editor.getMarkdown();
+      });
+    });
 
-
-
-  <div>
-    <%= form.submit "Update Note" %>
-  </div>
-
-    <%= form_with model: @post do |form| %>
-    <%= form.label :content %>
-    <%= marksmith_tag form, :content %>
-    <%= form.submit %>
-
-    <div data-controller="markdown">
-  <div data-markdown-target="editor"
-       contenteditable="true"
-       onblur="this.dispatchEvent(new Event('save', {bubbles: true}))"
-       onclick="this.dispatchEvent(new Event('edit', {bubbles: true}))">
-    ## Hello, Markdown!
-  </div>
-  <div data-markdown-target="preview"></div>
-</div>
-
-
-<% end %>
+    function clearEditor() {
+      if (confirm("Are you sure you want to clear the editor?")) {
+        editor.clear();
+        document.getElementById('note-title').value = '';
+      }
+    }
+  </script>
+</body>
+</html>

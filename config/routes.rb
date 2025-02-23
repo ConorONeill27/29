@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     end
   end
   resources :notes do
-    collection { get "download", to: "notes#download", as: :download }
+    collection { get "/download/:id", to: "notes#download", as: :download }
   end
   resources :profiles
   resources :recordings

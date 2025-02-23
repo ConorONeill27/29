@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_23_121303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
     t.string "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id", null: false
+    t.index ["organization_id"], name: "index_notes_on_organization_id"
   end
 
   create_table "organization_memberships", force: :cascade do |t|
@@ -126,6 +128,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
   add_foreign_key "notebook_memberships", "users"
   add_foreign_key "notebooks", "organizations"
   add_foreign_key "notebooks", "users", column: "owner_id"
+  add_foreign_key "notes", "organizations"
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
   add_foreign_key "sessions", "users"
