@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"queue_name:ETI"ActiveJob::Core#queue_name;TI"W;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"(Queue in which the job will reside.;T:
+@fileI"lib/active_job/core.rb;T:0@omit_headings_from_table_of_contents_below0F@I"ActiveJob::Core;TcRDoc::NormalModule0

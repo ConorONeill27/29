@@ -12,7 +12,15 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_02_22_234045) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
+  enable_extension "plpgsql"
+
+  create_table "documents", force: :cascade do |t|
+    t.string "filename"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "bullet_points"
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false

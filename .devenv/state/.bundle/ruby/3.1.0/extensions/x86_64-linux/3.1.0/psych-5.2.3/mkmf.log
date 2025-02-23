@@ -1,0 +1,29 @@
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib pkg-config --exists yaml-0.1
+package configuration for yaml-0.1 is not found
+find_header: checking for yaml.h... -------------------- no
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -o conftest -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC conftest.c  -L. -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L. -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -Wl,-rpath,/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -L/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib -lruby-3.1.6  -lm  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/lib "gcc -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/x86_64-linux -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0/ruby/backward -I/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/include/ruby-3.1.0 -I.    -O3 -fPIC   -c conftest.c"
+conftest.c:3:10: fatal error: yaml.h: No such file or directory
+    3 | #include <yaml.h>
+      |          ^~~~~~~~
+compilation terminated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <yaml.h>
+/* end */
+
+--------------------
+

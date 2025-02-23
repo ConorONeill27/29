@@ -1,0 +1,46 @@
+name: Ruby
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  ruby-versions:
+    uses: ruby/actions/.github/workflows/ruby_versions.yml@master
+    with:
+      engine: cruby
+      min_version: 3.1
+
+  build:
+    needs: ruby-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Bundle install
+      run: |
+        bundle install
+    - name: Run the test suite
+      run: |
+        RUBYOPT=--disable-error_highlight bundle exec rake TESTOPT=-v
+
+  prism:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: head
+        bundler-cache: true
+    - name: Run the test suite
+      run: |
+        RUBYOPT="--disable-error_highlight --parser=prism" bundle exec rake TESTOPT=-v

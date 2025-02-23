@@ -1,0 +1,154 @@
+U:RDoc::NormalModule[iI"Routing:ETI"ActionDispatch::Routing;T0o:RDoc::Markup::Document:@parts[o;;[Lo:RDoc::Markup::Paragraph;[I"The routing module provides URL rewriting in native Ruby. It's a way to
+redirect incoming requests to controllers and actions. This replaces
+mod_rewrite rules. Best of all, Rails' Routing works with any web server.
+Routes are defined in <code>config/routes.rb</code>.;To;	;[I"}Think of creating routes as drawing a map for your requests. The map tells
+them where to go based on some predefined pattern:;To:RDoc::Markup::Verbatim;[
+I"&Rails.application.routes.draw do
+;TI"7  Pattern 1 tells some request to go to one place
+;TI",  Pattern 2 tell them to go to another
+;TI"  ...
+;TI"	end
+;T:@format0o;	;[I"'The following symbols are special:;To;
+;[I".:controller maps to your controller name
+;TI"9:action     maps to an action with your controllers
+;T;0o;	;[I"NOther names simply map to a parameter as in the case of <code>:id</code>.;TS:RDoc::Markup::Heading:
+leveli:	textI"Resources;To;	;[I"mResource routing allows you to quickly declare all of the common routes for a
+given resourceful controller. Instead of declaring separate routes for your
+<code>index</code>, <code>show</code>, <code>new</code>, <code>edit</code>, <code>create</code>, <code>update</code>, and <code>destroy</code> actions, a
+resourceful route declares them in a single line of code:;To;
+;[I"resources :photos
+;T;0o;	;[I"Sometimes, you have a resource that clients always look up without referencing
+an ID. A common example, /profile always shows the profile of the currently
+logged in user. In this case, you can use a singular resource to map /profile
+(rather than /profile/:id) to the show action.;To;
+;[I"resource :profile
+;T;0o;	;[I"RIt's common to have resources that are logically children of other resources:;To;
+;[I"resources :magazines do
+;TI"  resources :ads
+;TI"	end
+;T;0o;	;[I"8You may wish to organize groups of controllers under a namespace. Most
+commonly, you might group a number of administrative controllers under an
+<code>admin</code> namespace. You would place these controllers under the
+<code>app/controllers/admin</code> directory, and you can group them together in your
+router:;To;
+;[I"namespace "admin" do
+;TI"#  resources :posts, :comments
+;TI"	end
+;T;0o;	;[I"¿Alternatively, you can add prefixes to your path without using a separate
+directory by using <code>scope</code>. <code>scope</code> takes additional options which apply to
+all enclosed routes.;To;
+;[I"+scope path: "/cpanel", as: 'admin' do
+;TI"#  resources :posts, :comments
+;TI"	end
+;T;0o;	;[I"{For more, see Routing::Mapper::Resources#resources,
+Routing::Mapper::Scoping#namespace, and Routing::Mapper::Scoping#scope.;TS;;i;I"Non-resourceful routes;To;	;[I"¡For routes that don't fit the <code>resources</code> mold, you can use the HTTP helper
+methods <code>get</code>, <code>post</code>, <code>patch</code>, <code>put</code> and <code>delete</code>.;To;
+;[I"&get 'post/:id', to: 'posts#show'
+;TI"1post 'post/:id', to: 'posts#create_comment'
+;T;0o;	;[I"ßNow, if you POST to <code>/posts/:id</code>, it will route to the <code>create_comment</code>
+action. A GET on the same URL will route to the <code>show</code> action.;To;	;[I"ôIf your route needs to respond to more than one HTTP method (or all methods)
+then using the <code>:via</code> option on <code>match</code> is preferable.;To;
+;[I"<match 'post/:id', to: 'posts#show', via: [:get, :post]
+;T;0S;;i;I"Named routes;To;	;[I"“Routes can be named by passing an <code>:as</code> option, allowing for easy reference
+within your source as <code>name_of_route_url</code> for the full URL and
+<code>name_of_route_path</code> for the URI path.;To;	;[I"Example:;To;
+;[
+I"# In config/routes.rb
+;TI"5get '/login', to: 'accounts#login', as: 'login'
+;TI"
+;TI"-# With render, redirect_to, tests, etc.
+;TI"redirect_to login_url
+;T;0o;	;[I"%Arguments can be passed as well.;To;
+;[I"(redirect_to show_item_path(id: 25)
+;T;0o;	;[I"PUse <code>root</code> as a shorthand to name a route for the root path "/".;To;
+;[I"# In config/routes.rb
+;TI"root to: 'blogs#index'
+;T@kI"2# would recognize http://www.example.com/ as
+;TI"7params = { controller: 'blogs', action: 'index' }
+;T@kI"&# and provide these named routes
+;TI"/root_url   # => 'http://www.example.com/'
+;TI"root_path  # => '/'
+;T;0o;	;[I"ÖNote: when using <code>controller</code>, the route is simply named after the method you
+call on the block parameter rather than map.;To;
+;[I"# In config/routes.rb
+;TI"controller :blog do
+;TI"#  get 'blog/show'    => :list
+;TI"%  get 'blog/delete'  => :delete
+;TI"#  get 'blog/edit'    => :edit
+;TI"	end
+;T@kI"8# provides named routes for show, delete, and edit
+;TI"=link_to @article.title, blog_show_path(id: @article.id)
+;T;0S;;i;I"Pretty URLs;To;	;[I"2Routes can generate pretty URLs. For example:;To;
+;[
+I"Rget '/articles/:year/:month/:day', to: 'articles#find_by_id', constraints: {
+;TI"  year:       /\d{4}/,
+;TI"  month:      /\d{1,2}/,
+;TI"  day:        /\d{1,2}/
+;TI"}
+;T;0o;	;[I"WUsing the route above, the URL "http://localhost:3000/articles/2005/11/06"
+maps to;To;
+;[I"5params = {year: '2005', month: '11', day: '06'}
+;T;0S;;i;I"'Regular Expressions and parameters;To;	;[I"MYou can specify a regular expression to define a format for a parameter.;To;
+;[
+I"controller 'geocode' do
+;TI"<  get 'geocode/:postalcode', to: :show, constraints: {
+;TI"&    postalcode: /\d{5}(-\d{4})?/
+;TI"	  }
+;TI"	end
+;T;0o;	;[I"aConstraints can include the 'ignorecase' and 'extended syntax' regular
+expression modifiers:;To;
+;[I"controller 'geocode' do
+;TI"<  get 'geocode/:postalcode', to: :show, constraints: {
+;TI"+    postalcode: /hx\d\d\s\d[a-z]{2}/i
+;TI"	  }
+;TI"	end
+;T@kI"controller 'geocode' do
+;TI"<  get 'geocode/:postalcode', to: :show, constraints: {
+;TI"*    postalcode: /# Postalcode format
+;TI"       \d{5} #Prefix
+;TI"       (-\d{4})? #Suffix
+;TI"       /x
+;TI"	  }
+;TI"	end
+;T;0o;	;[I"ªUsing the multiline modifier will raise an <code>ArgumentError</code>. Encoding regular
+expression modifiers are silently ignored. The match will always use the
+default encoding or ASCII.;TS;;i;I"External redirects;To;	;[I"XYou can redirect any path to another path using the redirect helper in your
+router:;To;
+;[I",get "/stories", to: redirect("/posts")
+;T;0S;;i;I"Unicode character routes;To;	;[I"=You can specify unicode character routes in your router:;To;
+;[I"0get "„Åì„Çì„Å´„Å°„ÅØ", to: "welcome#index"
+;T;0S;;i;I"!Routing to Rack Applications;To;	;[I"µInstead of a String, like <code>posts#index</code>, which corresponds to the index action
+in the PostsController, you can specify any Rack application as the endpoint
+for a matcher:;To;
+;[I"*get "/application.js", to: Sprockets
+;T;0S;;i;I"Reloading routes;To;	;[I"0You can reload routes if you feel you must:;To;
+;[I"&Rails.application.reload_routes!
+;T;0o;	;[I"£This will clear all named routes and reload config/routes.rb if the file has
+been modified from last load. To absolutely force reloading, use <code>reload!</code>.;TS;;i;I"Testing Routes;To;	;[I"2The two main methods for testing your routes:;TS;;i;I" <code>assert_routing</code>;To;
+;[	I"*def test_movie_route_properly_splits
+;TI"B  opts = {controller: "plugin", action: "checkout", id: "2"}
+;TI"0  assert_routing "plugin/checkout/2", opts
+;TI"	end
+;T;0o;	;[I"g<code>assert_routing</code> lets you test whether or not the route properly resolves into
+options.;TS;;i;I"#<code>assert_recognizes</code>;To;
+;[	I" def test_route_has_options
+;TI"?  opts = {controller: "plugin", action: "show", id: "12"}
+;TI"2  assert_recognizes opts, "/plugins/show/12"
+;TI"	end
+;T;0o;	;[I"ºNote the subtle difference between the two: <code>assert_routing</code> tests that a URL
+fits options while <code>assert_recognizes</code> tests that a URL breaks into parameters
+properly.;To;	;[I"bIn tests you can simply pass the URL or named route to <code>get</code> or <code>post</code>.;To;
+;[I"def send_to_jail
+;TI"  get '/jail'
+;TI"   assert_response :success
+;TI"	end
+;T@kI"def goes_to_login
+;TI"  get login_url
+;TI"  #...
+;TI"	end
+;T;0S;;i;I"#View a list of all your routes;To;
+;[I"$ bin/rails routes
+;T;0o;	;[I"≠Target a specific controller with <code>-c</code>, or grep routes using <code>-g</code>. Useful in
+conjunction with <code>--expanded</code> which displays routes vertically.;T:
+@fileI"#lib/action_dispatch/routing.rb;T:0@omit_headings_from_table_of_contents_below0o;;[ ;I",lib/action_dispatch/routing/endpoint.rb;T;0o;;[ ;I"-lib/action_dispatch/routing/inspector.rb;T;0o;;[ ;I"*lib/action_dispatch/routing/mapper.rb;T;0o;;[ ;I"6lib/action_dispatch/routing/polymorphic_routes.rb;T;0o;;[ ;I"/lib/action_dispatch/routing/redirection.rb;T;0o;;[ ;I"-lib/action_dispatch/routing/route_set.rb;T;0o;;[ ;I"0lib/action_dispatch/routing/routes_proxy.rb;T;0o;;[ ;I"+lib/action_dispatch/routing/url_for.rb;T;0;0;0[ [ [ [[I"
+class;T[[:public[ [:protected[ [:private[ [I"instance;T[[;[ [;[ [;[ [[I"ActiveSupport::Autoload;To;;[ ;@;0I"#lib/action_dispatch/routing.rb;T[U:RDoc::Context::Section[i 0o;;[ ;0;0[@@@@@@@ @#@&I"6lib/action_dispatch/testing/assertions/routing.rb;TI"/lib/action_dispatch/testing/integration.rb;TI"ActionDispatch;TcRDoc::NormalModule

@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"request_count:ETI"7ActionDispatch::Integration::Session#request_count;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I";A running counter of the number of requests processed.;T:
+@fileI"/lib/action_dispatch/testing/integration.rb;T:0@omit_headings_from_table_of_contents_below0F@I")ActionDispatch::Integration::Session;TcRDoc::NormalClass0

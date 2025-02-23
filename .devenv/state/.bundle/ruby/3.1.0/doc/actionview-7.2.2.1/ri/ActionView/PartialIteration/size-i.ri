@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"	size:ETI"&ActionView::PartialIteration#size;TI"R;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"?The number of iterations that will be done by the partial.;T:
+@fileI"4lib/action_view/renderer/collection_renderer.rb;T:0@omit_headings_from_table_of_contents_below0F@I"!ActionView::PartialIteration;TcRDoc::NormalClass0

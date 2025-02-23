@@ -1,0 +1,24 @@
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/puma-6.6.0/ext/puma_http11
+/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/bin/ruby extconf.rb
+checking for BIO_read() in -llibcrypto... no
+checking for BIO_read() in -lcrypto... no
+checking for BIO_read() in -llibeay32... no
+** Puma will be compiled without SSL support
+creating Makefile
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/puma-6.6.0/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-hpipzw sitelibdir\=./.gem.20250222-69455-hpipzw clean
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/puma-6.6.0/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-hpipzw sitelibdir\=./.gem.20250222-69455-hpipzw
+compiling http11_parser.c
+compiling mini_ssl.c
+compiling puma_http11.c
+linking shared-object puma/puma_http11.so
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/puma-6.6.0/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-hpipzw sitelibdir\=./.gem.20250222-69455-hpipzw install
+install -c -p -m 755 puma_http11.so ./.gem.20250222-69455-hpipzw/puma
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/puma-6.6.0/ext/puma_http11
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-hpipzw sitelibdir\=./.gem.20250222-69455-hpipzw clean

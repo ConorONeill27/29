@@ -1,0 +1,22 @@
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.18.4/ext/bootsnap
+/nix/store/s3l2k1x8v7x7kisg21mgg014gqm3aqgl-ruby-3.1.6/bin/ruby extconf.rb
+checking for fdatasync() in unistd.h... yes
+checking for whether -D_GNU_SOURCE is accepted as CPPFLAGS... yes
+checking for whether -O3 is accepted as CFLAGS... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.18.4/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-mu35zm sitelibdir\=./.gem.20250222-69455-mu35zm clean
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.18.4/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-mu35zm sitelibdir\=./.gem.20250222-69455-mu35zm
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.so
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.18.4/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-mu35zm sitelibdir\=./.gem.20250222-69455-mu35zm install
+install -c -p -m 755 bootsnap.so ./.gem.20250222-69455-mu35zm/bootsnap
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.1.0/gems/bootsnap-1.18.4/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20250222-69455-mu35zm sitelibdir\=./.gem.20250222-69455-mu35zm clean

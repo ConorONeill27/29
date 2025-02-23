@@ -1,0 +1,19 @@
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.3.0/gems/debug-1.10.0/ext/debug
+/nix/store/0ws1v8mcnqh6zkhdw7i5p5yb0rvcx188-ruby-3.3.5/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.3.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250222-145306-j41lp sitelibdir\=./.gem.20250222-145306-j41lp clean
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.3.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250222-145306-j41lp sitelibdir\=./.gem.20250222-145306-j41lp
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.3.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250222-145306-j41lp sitelibdir\=./.gem.20250222-145306-j41lp install
+install -c -p -m 755 debug.so ./.gem.20250222-145306-j41lp/debug
+
+current directory: /home/luke/Programs/group-29-hack-ireland/.devenv/state/.bundle/ruby/3.3.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250222-145306-j41lp sitelibdir\=./.gem.20250222-145306-j41lp clean

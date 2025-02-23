@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"locking_column:ETI"CActiveRecord::Locking::Optimistic::ClassMethods#locking_column;TI"R;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"PThe version column used for optimistic locking. Defaults to +lock_version+.;T:
+@fileI",lib/active_record/locking/optimistic.rb;T:0@omit_headings_from_table_of_contents_below0F@I"4ActiveRecord::Locking::Optimistic::ClassMethods;TcRDoc::NormalModule0

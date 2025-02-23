@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"	root:ETI"Rack::Directory#root;TI"R;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"GThe root of the directory hierarchy.  Only requests for files and ;TI"<directories inside of the root directory are supported.;T:
+@fileI"lib/rack/directory.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Rack::Directory;TcRDoc::NormalClass0

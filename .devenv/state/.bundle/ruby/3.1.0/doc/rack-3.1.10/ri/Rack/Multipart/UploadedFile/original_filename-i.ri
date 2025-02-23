@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"original_filename:ETI"4Rack::Multipart::UploadedFile#original_filename;TI"R;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"CThe filename, *not* including the path, of the "uploaded" file;T:
+@fileI"(lib/rack/multipart/uploaded_file.rb;T:0@omit_headings_from_table_of_contents_below0F@I""Rack::Multipart::UploadedFile;TcRDoc::NormalClass0
