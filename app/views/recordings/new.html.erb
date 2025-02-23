@@ -1,0 +1,41 @@
+<button id="startBtn">Start Recording</button>
+<button id="stopBtn" disabled>Stop Recording</button>
+<script>
+  const csrfToken = document.querySelector("meta[name='csrf-token']").content;
+
+  let mediaRecorder;
+  let audioChunks = [];
+
+  document.getElementById('startBtn').addEventListener('click', async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+    audioChunks = [];
+
+    mediaRecorder.addEventListener("dataavailable", event => {
+      audioChunks.push(event.data);
+    });
+    
+    mediaRecorder.addEventListener("stop", () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append('recording[audio]', audioBlob, 'recording.webm');
+
+      fetch("/recordings", {
+        method: 'POST',
+        body: formData,
+        headers: {
+          "X-CSRF-Token": csrfToken,
+        }
+      });
+    });
+    
+    document.getElementById('stopBtn').disabled = false;
+  });
+
+  document.getElementById('stopBtn').addEventListener('click', () => {
+    mediaRecorder.stop();
+    document.getElementById('stopBtn').disabled = true;
+  });
+</script>
+<p><% @speech %></p>

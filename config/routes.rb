@@ -12,9 +12,11 @@ Rails.application.routes.draw do
   Rails.application.routes.draw { resources :organizations }
   Rails.application.routes.draw { resources :notes }
   Rails.application.routes.draw { resources :profiles }
+  Rails.application.routes.draw { resources :recordings }
 
   # Add a route for "My Hub"
   get "/my_hub", to: "my_hubs#index", as: :my_hub
+
 
   match "*path", to: "application#not_found", via: :all
 end

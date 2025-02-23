@@ -1,0 +1,15 @@
+<%= form_with(model: @recording, local: true) do |form| %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title, placeholder: @note.title  %>
+  </div>
+
+  <div>
+    <%= form.label :body %>
+    <%= form.text_area :body, placeholder: @note.body %>
+  </div>
+
+  <div>
+    <%= form.submit "Update Note" %>
+  </div>
+<% end %>
