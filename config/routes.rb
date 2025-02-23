@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "notebooks/index"
+  get "notebooks/show"
+  get "notebooks/new"
+  get "notebooks/create"
+  get "notebooks/edit"
+  get "notebooks/update"
+  get "notebooks/destroy"
   get "graph/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -37,6 +44,20 @@ Rails.application.routes.draw do
       delete 'remove_member/:user_id', to: 'notebooks#remove_member', as: 'remove_member'
     end
   end
+
+  Rails.application.routes.draw do
+  get "notebooks/index"
+  get "notebooks/show"
+  get "notebooks/new"
+  get "notebooks/create"
+  get "notebooks/edit"
+  get "notebooks/update"
+  get "notebooks/destroy"
+    resources :notebooks do
+      resources :notes
+    end
+  end
+  
   
 
   match "*path", to: "application#not_found", via: :all

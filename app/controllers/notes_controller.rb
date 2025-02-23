@@ -1,9 +1,41 @@
-require 'markdoc'
+#require 'markdoc'
 
 class NotesController < ApplicationController
   def index
     @notes = Note.all
   end
+
+  # app/controllers/notes_controller.rb
+class NotesController < ApplicationController
+  before_action :set_notebook
+
+  def index
+    @notes = @notebook.notes
+  end
+
+  def show
+    @note = @notebook.notes.find(params[:id])
+  end
+
+  def new
+    @note = @notebook.notes.build
+  end
+
+  def create
+    @note = @notebook.notes.build(note_params)
+    if @note.save
+      redirect_to [@notebook, @note], notice: 'Note was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  private
+
+
+
+end
+
 
   def show
     @note = Note.find(params[:id])
@@ -47,6 +79,10 @@ class NotesController < ApplicationController
  
 
   private
+
+  def set_notebook
+    @notebook = current_user.notebooks.find(params[:notebook_id])
+  end
 
   def note_params
     params.require(:note).permit(:title, :body)
