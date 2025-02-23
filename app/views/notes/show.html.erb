@@ -1,5 +1,171 @@
-<h1> <%= @note.title %> </h1>
-<%= link_to "Edit", edit_note_path(@note) %>
-</br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= @note.title %> - Markdown Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<%= markdown(@note.body) %>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Scoped Styling for Markdown Viewer -->
+<style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Container for Markdown View */
+    .markdown-container {
+      width: 100%;
+      max-width: 800px;
+      background: #1a1f2a;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      margin: 40px auto;
+    }
+
+    /* Title & Edit Button Row */
+    .markdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .markdown-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .edit-btn {
+      padding: 8px 15px;
+      background-color: #5865f2;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .edit-btn:hover {
+      background-color: #4752d0;
+    }
+
+    /* Markdown Content */
+    .markdown-body {
+      line-height: 1.6;
+      font-size: 18px;
+      padding: 15px;
+      background: #14161c;
+      border-radius: 8px;
+      color: #ccc;
+    }
+
+    /* Markdown Elements */
+    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+      color: #fff;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      margin-top: 20px;
+    }
+
+    .markdown-body p {
+      margin-bottom: 10px;
+    }
+
+    .markdown-body pre {
+      background: #1f2833;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: monospace;
+      color: #00ff00;
+    }
+
+    .markdown-body code {
+      background: #222;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: monospace;
+      color: #ffcc00;
+    }
+
+    .markdown-body ul {
+      list-style: square;
+      margin-left: 20px;
+    }
+
+    .markdown-body ol {
+      list-style: decimal;
+      margin-left: 20px;
+    }
+
+    .markdown-body blockquote {
+      border-left: 4px solid #5865f2;
+      padding-left: 15px;
+      font-style: italic;
+      color: #aaa;
+    }
+
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .markdown-body th, .markdown-body td {
+      border: 1px solid #333;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .markdown-body th {
+      background-color: #222;
+      color: #fff;
+    }
+
+    /* Mobile Optimization */
+    @media (max-width: 768px) {
+      .markdown-container {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .markdown-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .markdown-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .markdown-body {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="markdown-container">
+    <div class="markdown-header">
+      <h1><%= @note.title %></h1>
+      <%= link_to "✏️ Edit Note", edit_note_path(@note), class: "edit-btn" %>
+    </div>
+
+    <div class="markdown-body">
+      <%= markdown(@note.body) %>
+    </div>
+  </div>
+</body>
+</html>

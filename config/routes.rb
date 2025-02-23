@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   resources :organizations
   resources :notes do
-    collection { get "download", to: "notes#download", as: :download }
+    collection { get "/download/:id", to: "notes#download", as: :download }
   end
   resources :profiles
   resources :recordings
