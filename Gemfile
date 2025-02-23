@@ -32,7 +32,7 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 gem "bootsnap", require: false
 
 # Render markdown
-gem "redcarpet"
+gem "markdoc"
 
 gem "dotenv"
 
