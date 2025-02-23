@@ -36,15 +36,16 @@
       transition: color 0.2s ease;
     }
     .top-nav .nav-links a:hover, .top-nav .actions a:hover { color: #fff; }
-    .demo-btn {
+    .nav-btn {
       padding: 0.5rem 1rem;
       border: 2px solid #5865f2;
       border-radius: 6px;
       color: #fff;
       font-weight: 500;
       transition: background-color 0.3s ease;
+      text-decoration: none;
     }
-    .demo-btn:hover { background-color: #5865f2; }
+    .nav-btn:hover { background-color: #5865f2; }
 
     /* CONTENT STRUCTURE */
     .content {
@@ -115,14 +116,11 @@
 <body>
   <!-- TOP NAVIGATION -->
   <header class="top-nav">
-    <div class="logo">My Hub</div>
     <div class="nav-links">
-      <a href="#">Dashboard</a>
-      <a href="#">Settings</a>
-      <a href="#">Profile</a>
+      <a href="/" class="nav-btn">← Leave Hub</a> <!-- ✅ Only "Leave Hub" button remains -->
     </div>
     <div class="actions">
-      <a href="#" class="demo-btn">+ New Note</a>
+      <a href="notes" class="demo-btn">+ New Note</a>
     </div>
   </header>
 
@@ -152,7 +150,7 @@
     <!-- MAIN GRID CONTENT -->
     <main class="main-content grid-background">
       <div class="grid">
-        <!-- Clickable coworker cards -->
+        <!-- Example coworker cards -->
         <a href="#" class="card">
           <div class="card-icon">👩</div>
           <div class="card-title">Alice Brown</div>
@@ -167,11 +165,6 @@
           <div class="card-icon">👩</div>
           <div class="card-title">Catherine Li</div>
           <div class="card-desc">Marketing Specialist with global impact.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Daniel Ortiz</div>
-          <div class="card-desc">DevOps expert for cloud migrations.</div>
         </a>
       </div>
     </main>
