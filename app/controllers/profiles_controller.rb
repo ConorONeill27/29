@@ -3,7 +3,12 @@ class ProfilesController < ApplicationController
     @user = current_user
     @related_users =
       Array(
-        current_user.organizations.includes(:users).map(&:users).flatten.uniq
+        current_user
+          &.organizations
+          &.includes(:users)
+          &.map(&:users)
+          &.flatten
+          &.uniq
       )
   end
 
