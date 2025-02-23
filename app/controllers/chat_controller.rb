@@ -1,102 +1,40 @@
+require "chatgpt"
+
 class ChatController < ApplicationController
-  require "net/http"
-  require "uri"
-  require "json"
+  CLIENT = ChatGPT::Client.new(ENV["OPENAI_API_KEY"])
 
-  def load_markdown_context
-    folder =
-      Rails.root.join("data", "markdown", "*.md").to_s
-    Dir
-      .glob(folder)
-      .map do |file|
-        text = File.read(file)
-        plain_text = text.gsub(/[#>*_`\[\]\(\)]/, "")
-        "Filename: #{File.basename(file)}\nText:\n#{plain_text}\n"
-      end
-      .join("\n---\n")
-  end
+  def summarize_documents
+    notes =
+      @current_user
+        &.organizations
+        &.includes(:notes)
+        &.flat_map(&:notes)
+        &.uniq
+        &.map(&:body)
+        &.join(" ")
 
-  def index
-    session[:conversation] ||= []
-  end
+    response =
+      CLIENT.chat(
+        [
+          {
+            model: "gpt-3.5-turbo",
+            role: "user",
+            content:
+              "You will get an unordered list of notes from a large company. You are an intern who really wants to impress his boss, here is his question: #{params[:prompt]}.
 
-  def message
-    user_message = params[:message]
-    session[:conversation] ||= []
-
-    session[:conversation] << "You: #{user_message}"
-
-    markdown_context = load_markdown_context
-    Rails.logger.debug "Loaded markdown context (#{markdown_context.size} characters)"
-
-    prompt = <<~PROMPT
-      Below are the contents of the provided documents:
-      #{markdown_context}
-
-      Based on the above, please answer the following question:
-      #{user_message}
-    PROMPT
-
-    # prompt = session[:conversation].join("\n") + "\n" + prompt
-
-    api_key = ENV["GEMINI_API_KEY"]
-    url =
-      URI(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=#{api_key}"
+            And here are the notes: #{notes}"
+          }
+        ]
       )
 
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
+    Rails.logger.debug("response: " + response)
 
-    request = Net::HTTP::Post.new(url)
-    request["Content-Type"] = "application/json"
-
-    payload = { contents: [{ parts: [{ text: prompt }] }] }
-    request.body = payload.to_json
-
-    response = http.request(request)
-
-    if response.code.to_i != 200
-      render json: {
-               error: "API request failed with status #{response.code}"
-             },
-             status: :bad_request
-    else
-      data = JSON.parse(response.body)
-      Rails.logger.debug "API response: #{data.inspect}"
-
-      bot_reply =
-        if data["candidates"] && data["candidates"].first &&
-             data["candidates"].first["content"] &&
-             data["candidates"].first["content"]["parts"] &&
-             data["candidates"].first["content"]["parts"].first
-          data["candidates"].first["content"]["parts"].first["text"]
-        else
-          "No reply received."
-        end
-
-      session[:conversation] << "Bot: #{bot_reply}"
-      render json: { reply: bot_reply }
-    end
-  rescue => e
-    render json: {
-             error: "Error: #{e.message}"
-           },
-           status: :internal_server_error
-  end
-
-  def new
-    @recording = Recording.new(recording_params)
-    if @recording.save
-      redirect_to @recording, notice: "Recording was successfully saved."
-    else
-      render :new
-    end
+    render json: response["choices"][0]["message"]["content"]
   end
 
   private
 
-  def recording_params
-    params.require(:recording).permit(:audio)
+  def chat_params
+    params.require(:chat).permit(:prompt)
   end
 end

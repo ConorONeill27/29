@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
-  <!-- vis-network & Compromise for visualization -->
-  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-  <script src="https://unpkg.com/compromise"></script>
+  <!--<!-- vis-network & Compromise for visualization -->-->
+  <!--<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>-->
+  <!--<script src="https://unpkg.com/compromise"></script>-->
   
   <style>
     /* GLOBAL STYLES */
@@ -346,6 +346,27 @@
 
   <!-- SCRIPTS -->
   <script>
+    async function addChatLog(text) {
+        document.getElementById('chat-log').innerHTML += `
+          <p>You: ${text}</p>
+        `;
+
+        const formData = new FormData();
+        formData.append('prompt', text);
+
+        let chat = await fetch("/chat/summarize_documents", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            "X-CSRF-Token": csrfToken,
+          }
+        });
+
+        document.getElementById('chat-log').innerHTML += `
+          <p>Bot: ${await chat.text()}</p>
+        `;
+    }
+
     const csrfToken = document.querySelector("meta[name='csrf-token']").content;
     let mediaRecorder;
     let audioChunks = [];
@@ -382,10 +403,8 @@
         });
 
         let data = await res.json();
-  
-        document.getElementById('chat-log').innerHTML += `
-          <p>You: ${data.transcription}</p>
-        `;
+
+        await addChatLog(data.transcription);
       });
 
       document.getElementById('stopBtn').style = "display: block";
@@ -487,10 +506,10 @@
         const promise = new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = async function(e) {
-            const content = e.target.result;
-            const keywords = extractProperNouns(content);
-            const classification = await classifyText(content);
-            resolve({ name: file.name, keywords, classification });
+            //const content = e.target.result;
+            //const keywords = extractProperNouns(content);
+            //const classification = await classifyText(content);
+            //resolve({ name: file.name, keywords, classification });
           };
           reader.onerror = reject;
           reader.readAsText(file);

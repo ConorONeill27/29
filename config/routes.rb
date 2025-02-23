@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   # Health check / PWA
-  get "up" => "rails/health#show", as: :rails_health_check
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "up" => "rails/health#show", :as => :rails_health_check
+  get "service-worker" => "rails/pwa#service_worker", :as => :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", :as => :pwa_manifest
 
   # Graph routes
   get "graph/index"
@@ -24,9 +24,7 @@ Rails.application.routes.draw do
   root "home#index"
 
   # Chat
-  post "chat/message", to: "chat#message"
-  post "chat/clear", to: "chat#clear"
-  post "chat/reimport", to: "chat#reimport"
+  post "chat/summarize_documents", to: "chat#summarize_documents"
 
   # Misc pages
   get "/about_us", to: "about_us#index", as: :about_us
@@ -37,9 +35,7 @@ Rails.application.routes.draw do
   get "/my_hubs/graph_data", to: "my_hubs#graph_data", as: :my_hub_graph_data
 
   resources :organizations do
-    member do
-      delete 'remove_user', to: 'organizations#remove_user'
-    end
+    member { delete "remove_user", to: "organizations#remove_user" }
   end
   resources :notes do
     collection { get "/download/:id", to: "notes#download", as: :download }
@@ -51,7 +47,9 @@ Rails.application.routes.draw do
     resources :notes, only: %i[create update destroy show index]
     member do
       post "add_member"
-      delete "remove_member/:user_id", to: "notebooks#remove_member", as: "remove_member"
+      delete "remove_member/:user_id",
+             to: "notebooks#remove_member",
+             as: "remove_member"
     end
   end
 
