@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Bundles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Using a Google Font (Inter) -->
+  <!-- Using Google Font "Inter" -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
   <%= stylesheet_link_tag "marksmith", media: "all" %>
@@ -24,7 +24,6 @@
       background: linear-gradient(135deg, #0c0f17, #000);
       color: #fff;
     }
-
     /* NAVIGATION BAR */
     nav {
       display: flex;
@@ -71,7 +70,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: calc(100vh - 80px);
+      min-height: calc(100vh - 80px); /* Full viewport minus nav height */
       padding: 0 1rem;
     }
     .hero h1 {
@@ -105,9 +104,33 @@
   </style>
 </head>
 <body>
-  <%= render "layouts/header" %>
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">Bundles</div>
+      <div class="nav-links">
+        <a href="#solutions">Solutions</a>
+        <a href="#industries">Industries</a>
+        <a href="#about">About Us</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <!-- "My Hub" button linking to the profiles index -->
+      <%= link_to "My Hub", profiles_path, class: "demo-btn", data: { turbo: false } %>
+    </div>
+  </nav>
 
-  <%= yield %>
-
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Welcome to Bundles</h1>
+    <p>
+      Simplify your workflow and take your projects to the next level. 
+      Explore solutions, industries, and more with just a few clicks.
+    </p>
+    <div class="hero-buttons">
+      <a href="#explore" class="btn">Explore Solutions</a>
+      <a href="#schedule" class="btn">Schedule a Demo</a>
+    </div>
+  </section>
 </body>
 </html>
