@@ -2,35 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>New Note - My Hub</title>
+  <title>Markdown Editor - My Hub (Dark Mode)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Editor.md CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md/css/editormd.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/editor.md/editormd.min.js"></script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f7f7f8;
-      color: #1a1a1a;
-      min-height: 100vh;
+      background-color: #0c0f17;
+      color: #fff;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
-    /* Navigation Bar */
-    .nav {
+    /* Toolbar Styling */
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: #fff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      background-color: #14161c;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      z-index: 100;
     }
-    .nav .logo { font-size: 1.4rem; font-weight: 700; }
-    .nav .actions button {
+    .toolbar .logo { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .toolbar button {
       padding: 0.6rem 1.2rem;
       background-color: #5865f2;
       color: white;
@@ -38,81 +45,110 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
+      margin-left: 1rem;
       transition: background-color 0.3s ease;
     }
-    .nav .actions button:hover { background-color: #4752d0; }
+    .toolbar button:hover { background-color: #4752d0; }
 
-    /* Editor Section */
-    .editor-container {
-      flex: 1;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-      overflow-y: auto;
+    /* Editor Container */
+    #markdown-editor {
+      width: 90%;
+      margin: 1rem auto;
+      height: calc(100vh - 80px);
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #14161c;
     }
-    .editor-container input.title {
-      width: 100%;
-      border: none;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      outline: none;
+
+    /* Editor.md dark adjustments */
+    .editormd {
+      background-color: #1a1f2a;
+      color: #fff;
     }
-    .editor-container textarea.content {
-      width: 100%;
-      border: none;
-      min-height: 60vh;
-      resize: none;
-      font-size: 1rem;
-      line-height: 1.6;
-      outline: none;
-      padding: 1rem;
+    .editormd-preview-theme-dark .editormd-preview-container {
+      background-color: #1a1f2a;
+      color: #ddd;
     }
-    .editor-container textarea::placeholder {
-      color: #b0b0b0;
-      font-style: italic;
+    .CodeMirror, .editormd-preview, .editormd-toolbar {
+      background-color: #1a1f2a !important;
+      color: #fff !important;
+    }
+    .editormd-toolbar {
+      border-bottom: 1px solid #333;
+    }
+    .CodeMirror-gutters {
+      background-color: #14161c !important;
+      border-right: 1px solid #333;
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
-      .editor-container { margin: 1rem; padding: 1.5rem; }
-      .editor-container input.title { font-size: 1.5rem; }
+      #markdown-editor { width: 100%; }
+      .toolbar { flex-direction: column; align-items: flex-start; }
+      .toolbar button { width: 100%; margin-bottom: 0.5rem; }
     }
   </style>
 </head>
 
 <body>
-  <!-- Navigation Bar -->
-  <nav class="nav">
-    <div class="logo">✍️ New Note</div>
-    <div class="actions">
-      <button onclick="saveNote()">Save Note</button>
-      <button onclick="window.location.href='/'">Back to My Hub</button>
+  <!-- Toolbar Section -->
+  <div class="toolbar">
+    <div class="logo">🌙 Markdown Editor (Dark Mode)</div>
+    <div>
+      <button onclick="saveMarkdown()">💾 Save as .md</button>
+      <button onclick="clearEditor()">🧹 Clear</button>
+      <button onclick="window.location.href='/my_hub'">← Back to My Hub</button>
     </div>
-  </nav>
-
-  <!-- Editor Section -->
-  <div class="editor-container">
-    <input class="title" type="text" placeholder="Title your note...">
-    <textarea class="content" placeholder="Start writing your ideas, notes, or plans here..."></textarea>
   </div>
 
-  <script>
-    function saveNote() {
-      const title = document.querySelector('.title').value.trim();
-      const content = document.querySelector('.content').value.trim();
+  <!-- Editor.md Container -->
+  <div id="markdown-editor">
+    <textarea style="display:none;">### Welcome to Markdown Editor 🌙  
+Start taking notes in **Markdown** with dark mode support.</textarea>
+  </div>
 
-      if (!title || !content) {
-        alert('🚨 Title and content cannot be empty!');
+  <!-- Editor.md Initialization and Save Function -->
+  <script>
+    var editor;
+
+    $(function() {
+      editor = editormd("markdown-editor", {
+        width: "100%",
+        height: "100%",
+        path: "https://cdn.jsdelivr.net/npm/editor.md/lib/",
+        saveHTMLToTextarea: true,
+        emoji: true,
+        taskList: true,
+        tex: true,               // Enable LaTeX
+        flowChart: true,         // Enable Flowchart
+        sequenceDiagram: true,   // Enable Sequence Diagram
+        theme: "dark",
+        previewTheme: "dark",
+        editorTheme: "pastel-on-dark" // Dark editor theme
+      });
+    });
+
+    function saveMarkdown() {
+      const markdown = editor.getMarkdown();
+      if (!markdown.trim()) {
+        alert('🚨 Cannot save an empty file!');
         return;
       }
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'note.md';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
 
-      console.log("Saving note:", { title, content }); 
-      alert('✅ Note saved successfully!');
-      window.location.href = "/my_hub";  // Redirect after save
+    function clearEditor() {
+      if (confirm("Are you sure you want to clear the editor?")) {
+        editor.clear();
+      }
     }
   </script>
 </body>
