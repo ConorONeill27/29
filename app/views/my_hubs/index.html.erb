@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Document-Aware Chatbot</title>
-  <%= csrf_meta_tags %>
+  <meta charset="UTF-8">
+  <title>My Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
   <style>
+    /* GLOBAL STYLES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0c0f17, #000); color: #fff; }
-    
+    html, body { 
+      height: 100%; 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, #0c0f17, #000); 
+      color: #fff; 
+      overflow-x: hidden;
+    }
+
+    /* FIXED TOP NAVIGATION BAR */
     .top-nav {
       position: fixed;
       top: 0; left: 0;
@@ -165,56 +179,16 @@
     .card-title { font-weight: 600; margin-bottom: 0.5rem; }
     .card-desc { font-size: 0.9rem; color: #ccc; }
 
+    /* CHATBOX */
     #chat-container {
-      background: #1e2a38;
-      border: 1px solid #2f3b4c;
-      padding: 15px;
-      width: 400px;
-      height: 500px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+      position: fixed; bottom: 20px; right: 20px;
+      width: 350px; background: #1a1f2a; border-radius: 10px;
+      padding: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); z-index: 200;
     }
-    
-    #chat-log {
-      height: 80%;
-      overflow-y: auto;
-      border: 1px solid #34495e;
-      padding: 10px;
-      margin-bottom: 15px;
-      background-color: #273746;
-      border-radius: 6px;
-      color: #ecf0f1;
-    }
-    .message { margin-bottom: 10px; }
-    .user { color: #85c1e9; }
-    .bot { color: #82e0aa; }
-    #user-input {
-      width: 75%;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      background-color: #34495e;
-      color: #ecf0f1;
-    }
-    #send-button {
-      padding: 10px 15px;
-      font-size: 14px;
-      background-color: #5dade2;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      margin-left: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #send-button:hover { background-color: #5499c7; }
+    #chat-log { height: 250px; overflow-y: auto; padding: 10px; background-color: #20252f; border-radius: 5px; margin-bottom: 10px; color: #fff; }
+    #user-input { width: 70%; padding: 10px; border-radius: 5px; background-color: #2a2f3a; border: none; color: white; }
+    #send-button { width: 25%; padding: 10px; border-radius: 5px; border: none; background-color: #5865f2; color: white; cursor: pointer; }
+    #send-button:hover { background-color: #4752c4; }
   </style>
 </head>
 <body>
@@ -273,13 +247,28 @@
       </div>
     </main>
   </div>
-  
+
+  <!-- GRAPH SECTION (Centered) -->
+  <div class="content">
+    <section id="graph-section" class="grid-background">
+      <h2 style="color:#fff; text-align: center;">Classifier & Spread Out Network</h2>
+      <p style="text-align: center;">Note: Hello!</p>
+      <div id="controls" style="width: 100%; max-width: 600px;">
+        <label for="fileInput">Select .md files:</label>
+        <input type="file" id="fileInput" accept=".md" multiple>
+      </div>
+      <div id="tableContainer" style="width: 100%; max-width: 600px;"></div>
+      <button id="fullscreenButton">Toggle Fullscreen</button>
+      <div id="network" style="margin-top: 20px;"></div>
+      <div id="legend" class="legend"></div>
+    </section>
+  </div>
+
+  <!-- CHATBOX SECTION -->
   <div id="chat-container">
     <div id="chat-log"></div>
-    <div style="display: flex;">
-      <input type="text" id="user-input" placeholder="Type your message..." />
-      <button id="send-button">Send</button>
-    </div>
+    <input type="text" id="user-input" placeholder="Ask me something...">
+    <button id="send-button">Send</button>
   </div>
 
   <script>
@@ -291,7 +280,7 @@
     function appendMessage(sender, text) {
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
-      messageDiv.textContent = sender === 'user' ? 'You: ' + text : 'Bot: ' + text;
+      messageDiv.textContent = `${sender === 'user' ? 'You' : 'Bot'}: ${text}`;
       chatLog.appendChild(messageDiv);
       chatLog.scrollTop = chatLog.scrollHeight;
     }
@@ -299,7 +288,7 @@
     async function sendMessage(message) {
       appendMessage('user', message);
       try {
-        const response = await fetch('/chat/message', {
+        const response = await fetch('<%= my_hub_chat_message_path %>', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -308,11 +297,7 @@
           body: JSON.stringify({ message: message })
         });
         const data = await response.json();
-        if (!response.ok) {
-          appendMessage('bot', `Error: ${data.error}`);
-        } else {
-          appendMessage('bot', data.reply || 'No reply received.');
-        }
+        appendMessage('bot', data.reply || 'No reply received.');
       } catch (error) {
         appendMessage('bot', `Error: ${error.message}`);
       }
@@ -329,6 +314,271 @@
     userInput.addEventListener('keyup', (event) => {
       if (event.key === 'Enter') sendButton.click();
     });
+  </script>
+
+  <!-- GRAPH SCRIPT -->
+  <script>
+    const baseFontSize = 24;
+    const maxFontSize = 48;
+
+    document.getElementById('fullscreenButton').addEventListener('click', () => {
+      const networkContainer = document.getElementById('network');
+      if (!document.fullscreenElement) {
+        if (networkContainer.requestFullscreen) {
+          networkContainer.requestFullscreen();
+        } else if (networkContainer.mozRequestFullScreen) {
+          networkContainer.mozRequestFullScreen();
+        } else if (networkContainer.webkitRequestFullscreen) {
+          networkContainer.webkitRequestFullscreen();
+        } else if (networkContainer.msRequestFullscreen) {
+          networkContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    });
+
+    function extractProperNouns(text, topN = 5) {
+      const doc = nlp(text);
+      let personNames = doc.people().out('array');
+      let properNouns = doc.match('#ProperNoun').out('array');
+      properNouns = properNouns.filter(noun => !personNames.some(fullName => fullName.includes(noun)));
+      let combined = personNames.concat(properNouns);
+      const counts = {};
+      combined.forEach(word => {
+        word = word.trim();
+        if (word.length > 2) {
+          counts[word] = (counts[word] || 0) + 1;
+        }
+      });
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      let keywords = entries.slice(0, topN).map(entry => ({ keyword: entry[0], count: entry[1] }));
+      if (keywords.length === 0) { keywords = [{ keyword: "Uncategorized", count: 1 }]; }
+      return keywords;
+    }
+
+    async function classifyText(text) {
+      const apiUrl = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli";
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            inputs: text,
+            parameters: { candidate_labels: ["Technology", "Business", "Health", "Science", "Education", "Sports", "Politics", "Entertainment"] }
+          })
+        });
+        if (!response.ok) {
+          console.error("API response error:", response.statusText);
+          return "";
+        }
+        const result = await response.json();
+        if (result && result.labels && result.labels.length > 0) {
+          return result.labels[0];
+        }
+      } catch (err) {
+        console.error("Classification error:", err);
+      }
+      return "";
+    }
+
+    document.getElementById('fileInput').addEventListener('change', event => {
+      const files = event.target.files;
+      const docs = [];
+      const promises = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const promise = new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const content = e.target.result;
+            const keywords = extractProperNouns(content);
+            const classification = await classifyText(content);
+            resolve({ name: file.name, keywords, classification });
+          };
+          reader.onerror = reject;
+          reader.readAsText(file);
+        });
+        promises.push(promise);
+      }
+      Promise.all(promises).then(results => {
+        const globalFreq = {};
+        results.forEach(doc => {
+          doc.keywords.forEach(obj => {
+            const kw = obj.keyword;
+            globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+          });
+        });
+        results.forEach(doc => {
+          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+        });
+        updateTable(results);
+        buildNetwork(results, globalFreq);
+      });
+    });
+
+    function updateTable(docs) {
+      let html = '<table><thead><tr><th>File Name</th><th>Proper Noun Keywords</th><th>Tags</th><th>Classification</th></tr></thead><tbody>';
+      docs.forEach(doc => {
+        const keywordText = doc.keywords.map(obj => obj.keyword).join(', ');
+        html += `<tr>
+                   <td>${doc.name}</td>
+                   <td>${keywordText}</td>
+                   <td>${doc.tags.join(', ') || 'None'}</td>
+                   <td>${doc.classification}</td>
+                 </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = html;
+    }
+
+    function fadeIn(nodeId, nodes) {
+      let opacity = 0, step = 0.1;
+      const interval = setInterval(() => {
+        opacity += step;
+        if (opacity >= 1) { opacity = 1; clearInterval(interval); }
+        nodes.update({ id: nodeId, opacity: opacity });
+      }, 50);
+    }
+
+    function buildNetwork(docs, globalFreq) {
+      const nodes = new vis.DataSet([]);
+      const edges = new vis.DataSet([]);
+      const keywordNodes = {};
+      const classificationNodes = {};
+      let docId = 1, kwId = 1001, clsId = 2001;
+      docs.forEach(doc => {
+        const currentDocId = docId++;
+        nodes.add({ 
+          id: currentDocId, 
+          label: doc.name, 
+          fullLabel: doc.name, 
+          shape: 'box', 
+          color: { background: '#AED6F1', border: '#5DADE2' },
+          font: { size: baseFontSize },
+          type: 'document',
+          opacity: 1,
+          widthConstraint: { minimum: 0, maximum: 400 },
+          heightConstraint: { minimum: 0, maximum: 120 },
+          shadow: { enabled: true, color: 'rgba(0,0,0,0.2)', size: 5, x: 3, y: 3 }
+        });
+        doc.keywords.forEach(obj => {
+          const kw = obj.keyword;
+          const count = obj.count;
+          if (!(kw in keywordNodes)) {
+            const isTag = globalFreq[kw] > 1;
+            keywordNodes[kw] = kwId;
+            nodes.add({
+              id: kwId,
+              label: kw,
+              fullLabel: kw,
+              shape: 'ellipse',
+              color: isTag 
+                      ? { background: '#F1948A', border: '#E74C3C' }
+                      : { background: '#F9E79F', border: '#F7DC6F' },
+              font: { size: baseFontSize },
+              type: 'keyword',
+              opacity: 1,
+              widthConstraint: { minimum: 0, maximum: 150 },
+              heightConstraint: { minimum: 0, maximum: 10 }
+            });
+            kwId++;
+          }
+          edges.add({ 
+            from: currentDocId, 
+            to: keywordNodes[kw],
+            width: 1 + Math.log(count + 1)
+          });
+        });
+        
+        let cls = doc.classification || "";
+        if (!(cls in classificationNodes)) {
+          classificationNodes[cls] = clsId;
+          nodes.add({
+            id: clsId,
+            label: cls,
+            fullLabel: cls,
+            shape: 'diamond',
+            color: { background: '#C39BD3', border: '#AF7AC5' },
+            font: { size: baseFontSize },
+            type: 'classification',
+            opacity: 1,
+            widthConstraint: { minimum: 120 },
+            heightConstraint: { minimum: 40 }
+          });
+          clsId++;
+        }
+        edges.add({ from: currentDocId, to: classificationNodes[cls], width: 1 });
+      });
+      const container = document.getElementById('network');
+      const data = { nodes: nodes, edges: edges };
+      const options = {
+        layout: { improvedLayout: true },
+        physics: {
+          forceAtlas2Based: {
+            gravitationalConstant: -2000,
+            centralGravity: 0,
+            springLength: 3000,
+            springConstant: 0.05,
+            avoidOverlap: 2
+          },
+          maxVelocity: 50,
+          timestep: 0.35,
+          stabilization: { iterations: 500 }
+        },
+        interaction: { hover: true }
+      };
+      const network = new vis.Network(container, data, options);
+      let scheduledUpdate = false;
+      let pendingScale = network.getScale();
+      function scheduleUpdate(scale) {
+        pendingScale = scale;
+        if (!scheduledUpdate) {
+          scheduledUpdate = true;
+          requestAnimationFrame(() => {
+            updateNodeDisplay(pendingScale);
+            scheduledUpdate = false;
+          });
+        }
+      }
+      function updateNodeDisplay(scale) {
+        let effectiveFontSize = Math.min(baseFontSize / scale, maxFontSize);
+        const allNodes = nodes.get();
+        allNodes.forEach(function(node) {
+          let update = { id: node.id, font: { size: effectiveFontSize } };
+          if (node.type === 'keyword' && scale < 0.8) { update.hidden = true; }
+          else { update.hidden = false; }
+          if (node.type === 'document' && scale < 0.6) { update.label = ""; }
+          else { update.label = node.fullLabel; }
+          nodes.update(update);
+          if (!update.hidden) {
+            let currentOpacity = nodes.get(node.id).opacity;
+            if (!currentOpacity || currentOpacity < 1) {
+              nodes.update({ id: node.id, opacity: 0 });
+              fadeIn(node.id, nodes);
+            }
+          }
+        });
+      }
+      updateNodeDisplay(network.getScale());
+      network.on('zoom', params => { scheduleUpdate(params.scale); });
+      network.on('dragEnd', () => { scheduleUpdate(network.getScale()); });
+      network.once('stabilizationIterationsDone', () => {
+        const totalNodes = nodes.length;
+        const legendDiv = document.getElementById('legend');
+        legendDiv.innerHTML = totalNodes > 50 
+          ? "Large graph (" + totalNodes + " nodes). Zoom and pan to explore details." 
+          : "";
+      });
+    }
   </script>
 </body>
 </html>
