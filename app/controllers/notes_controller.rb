@@ -1,20 +1,21 @@
-#require 'markdoc'
-
 class NotesController < ApplicationController
-  def index
-    @notes = Note.all
-  end
-
-  # app/controllers/notes_controller.rb
-class NotesController < ApplicationController
-  before_action :set_notebook
+  before_action :set_notebooks
 
   def index
-    @notes = @notebook.notes
+    @notes = @notebooks&.notes&.flatten&.uniq
   end
 
   def show
     @note = @notebook.notes.find(params[:id])
+  end
+
+  def download
+    note = Note.find(params[:id])
+
+    send_data note.body,
+      filename: "#{note.title}.md",
+      type: "text/plain",
+      disposition: "attachment"
   end
 
   def new
@@ -24,7 +25,7 @@ class NotesController < ApplicationController
   def create
     @note = @notebook.notes.build(note_params)
     if @note.save
-      redirect_to [@notebook, @note], notice: 'Note was successfully created.'
+      redirect_to [@notebook, @note], notice: "Note was successfully created."
     else
       render :new
     end
@@ -32,33 +33,8 @@ class NotesController < ApplicationController
 
   private
 
-
-
-end
-
-
-  def show
-    @note = Note.find(params[:id])
-    raw_markdown = params[:content]
-    @html = Markdoc.to_html(raw_markdown)
-  end
-
-
-  def new
-    @note = Note.new
-  end
-
   def edit
     @note = Note.find(params[:id])
-  end
-
-  def create
-    @note = Note.new(note_params)
-    if @note.save
-      redirect_to @note, notice: "Note was successfully created."
-    else
-      render :new
-    end
   end
 
   def update
@@ -76,12 +52,10 @@ end
     redirect_to note_url, notice: "Note was successfully destroyed."
   end
 
- 
-
   private
 
-  def set_notebook
-    @notebook = current_user.notebooks.find(params[:notebook_id])
+  def set_notebooks
+    @notebooks = current_user.notebooks
   end
 
   def note_params

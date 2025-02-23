@@ -34,32 +34,34 @@ Rails.application.routes.draw do
   get "/my_hubs/graph_data", to: "my_hubs#graph_data", as: :my_hub_graph_data
 
   resources :organizations
-  resources :notes
+  resources :notes do
+    collection { get "download", to: "notes#download", as: :download }
+  end
   resources :profiles
   resources :recordings
 
   resources :notebooks do
-    resources :notes, only: [:create, :update, :destroy, :show, :index]
+    resources :notes, only: %i[create update destroy show index]
     member do
-      post 'add_member'  # Add a user to a shared notebook
-      delete 'remove_member/:user_id', to: 'notebooks#remove_member', as: 'remove_member'
+      post "add_member" # Add a user to a shared notebook
+      delete "remove_member/:user_id",
+        to: "notebooks#remove_member",
+        as: "remove_member"
     end
   end
 
   Rails.application.routes.draw do
-  get "notebooks/index"
-  get "notebooks/show"
-  get "notebooks/new"
-  get "notebooks/create"
-  get "notebooks/edit"
-  get "notebooks/update"
-  get "notebooks/destroy"
+    get "notebooks/index"
+    get "notebooks/show"
+    get "notebooks/new"
+    get "notebooks/create"
+    get "notebooks/edit"
+    get "notebooks/update"
+    get "notebooks/destroy"
     resources :notebooks do
       resources :notes
     end
   end
-  
-  
 
   match "*path", to: "application#not_found", via: :all
 end
