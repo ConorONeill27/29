@@ -430,7 +430,7 @@
       return "";
     }
 
-    // Handle file input changes (table update removed)
+    // Handle file input changes (for manual uploads)
     document.getElementById('fileInput').addEventListener('change', event => {
       const files = event.target.files;
       const promises = [];
@@ -458,13 +458,14 @@
           });
         });
         results.forEach(doc => {
-          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1)
+                                  .map(obj => obj.keyword);
         });
         buildNetwork(results, globalFreq);
       });
     });
 
-    // Fade in nodes
+    // Fade in nodes for a smooth appearance.
     function fadeIn(nodeId, nodes) {
       let opacity = 0, step = 0.1;
       const interval = setInterval(() => {
@@ -474,7 +475,7 @@
       }, 50);
     }
 
-    // Build the network graph using vis-network
+    // Build the network graph using vis-network.
     function buildNetwork(docs, globalFreq) {
       const nodes = new vis.DataSet([]);
       const edges = new vis.DataSet([]);
@@ -608,38 +609,73 @@
       });
     }
 
-    // Preload sample file data on page load
+    // Preload file data from your Rails endpoint that references your .md files in public/Employee_Notes.
+    // The endpoint '/employ_notes_files' returns an array of filenames.
     document.addEventListener("DOMContentLoaded", () => {
-      // Sample file data; replace with your own file references as needed.
-      const sampleDocs = [
-        {
-          name: "Sample File 1",
-          keywords: [
-            { keyword: "Technology", count: 3 },
-            { keyword: "Innovation", count: 2 }
-          ],
-          classification: "Technology"
-        },
-        {
-          name: "Sample File 2",
-          keywords: [
-            { keyword: "Business", count: 4 },
-            { keyword: "Finance", count: 1 }
-          ],
-          classification: "Business"
-        }
-      ];
-      const globalFreq = {};
-      sampleDocs.forEach(doc => {
-        doc.keywords.forEach(obj => {
-          const kw = obj.keyword;
-          globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+      fetch('/employ_notes_files')
+        .then(response => response.json())
+        .then(fileNames => {
+          // Map each filename to a promise that fetches its content
+          const fileDataPromises = fileNames.map(fileName => {
+            return fetch(`/Employee_Notes/${fileName}`)
+              .then(response => response.text())
+              .then(content => {
+                const keywords = extractProperNouns(content);
+                return classifyText(content)
+                  .then(classification => {
+                    return { name: fileName, keywords, classification };
+                  });
+              });
+          });
+          Promise.all(fileDataPromises).then(fileData => {
+            const globalFreq = {};
+            fileData.forEach(doc => {
+              doc.keywords.forEach(obj => {
+                const kw = obj.keyword;
+                globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+              });
+            });
+            fileData.forEach(doc => {
+              doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1)
+                                      .map(obj => obj.keyword);
+            });
+            buildNetwork(fileData, globalFreq);
+          });
+        })
+        .catch(err => {
+          console.error("Error fetching employ notes file list:", err);
+          // Fallback sample data if the endpoint fails:
+          const sampleDocs = [
+            {
+              name: "Sample File 1",
+              keywords: [
+                { keyword: "Technology", count: 3 },
+                { keyword: "Innovation", count: 2 }
+              ],
+              classification: "Technology"
+            },
+            {
+              name: "Sample File 2",
+              keywords: [
+                { keyword: "Business", count: 4 },
+                { keyword: "Finance", count: 1 }
+              ],
+              classification: "Business"
+            }
+          ];
+          const globalFreq = {};
+          sampleDocs.forEach(doc => {
+            doc.keywords.forEach(obj => {
+              const kw = obj.keyword;
+              globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+            });
+          });
+          sampleDocs.forEach(doc => {
+            doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1)
+                                    .map(obj => obj.keyword);
+          });
+          buildNetwork(sampleDocs, globalFreq);
         });
-      });
-      sampleDocs.forEach(doc => {
-        doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
-      });
-      buildNetwork(sampleDocs, globalFreq);
     });
   </script>
 </body>
