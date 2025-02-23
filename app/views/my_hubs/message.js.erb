@@ -1,0 +1,5 @@
+var output = document.getElementById('chat-output');
+var message = '<p><strong>You:</strong> <%= j user_message %></p>' +
+             '<p><strong>Bot:</strong> <%= j bot_response %></p>';
+output.innerHTML += message;
+document.getElementById('chat-input').value = '';

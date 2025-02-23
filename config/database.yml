@@ -2,21 +2,21 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: voca
-  password: note
+  username: postgres
+  password: 1234
   host: 127.0.0.1
   port: 5432
 
 development:
   <<: *default
-  database: vocanote
+  database: vocanote_development
 
 test:
   <<: *default
-  database: vocanote
+  database: vocanote_test
 
 production:
   <<: *default
-  database: vocanote
+  database: vocanote_production
   username: 1234
   password: 1234

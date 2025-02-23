@@ -5,7 +5,7 @@ class ChatController < ApplicationController
 
   def load_markdown_context
     folder =
-      ENV["MARKDOWN_PATH"] || Rails.root.join("data", "markdown", "*.md").to_s
+      Rails.root.join("data", "markdown", "*.md").to_s
     Dir
       .glob(folder)
       .map do |file|
