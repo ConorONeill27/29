@@ -1,5 +1,6 @@
 class AboutUsController < ApplicationController
+  allow_unauthenticated_access(only: :index)
+
   def index
-    # Renders app/views/about_us/index.html.erb by default
   end
 end
