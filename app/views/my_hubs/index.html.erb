@@ -141,6 +141,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
     .right-section::before {
       content: "";
@@ -189,19 +190,7 @@
       font-size: 14px;
       color: #6c757d;
     }
-    /* Text box beneath the network */
-    #graph-textbox {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin-top: 12px;
-      border-radius: 6px;
-      border: 1px solid #5865f2;
-      background-color: #14161c;
-      color: #fff;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
+    /* (The horizontal text box has been removed as requested) */
 
     /* CHATBOX (remains fixed at bottom right) */
     #chat-container {
@@ -335,7 +324,7 @@
           </a>
         </div>
       </div>
-      <!-- RIGHT SECTION: Graph & Text Box -->
+      <!-- RIGHT SECTION: Graph -->
       <div class="right-section">
         <h2 style="text-align: center;">Classifier & Spread Out Network</h2>
         <p style="text-align: center;">Note: Hello!</p>
@@ -346,7 +335,6 @@
         <button id="fullscreenButton">Toggle Fullscreen</button>
         <div id="network"></div>
         <div id="legend"></div>
-        <!-- Horizontal text box beneath the graph -->
       </div>
     </div>
   </div>
@@ -619,6 +607,40 @@
           : "";
       });
     }
+
+    // Preload sample file data on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      // Sample file data; replace with your own file references as needed.
+      const sampleDocs = [
+        {
+          name: "Sample File 1",
+          keywords: [
+            { keyword: "Technology", count: 3 },
+            { keyword: "Innovation", count: 2 }
+          ],
+          classification: "Technology"
+        },
+        {
+          name: "Sample File 2",
+          keywords: [
+            { keyword: "Business", count: 4 },
+            { keyword: "Finance", count: 1 }
+          ],
+          classification: "Business"
+        }
+      ];
+      const globalFreq = {};
+      sampleDocs.forEach(doc => {
+        doc.keywords.forEach(obj => {
+          const kw = obj.keyword;
+          globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+        });
+      });
+      sampleDocs.forEach(doc => {
+        doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+      });
+      buildNetwork(sampleDocs, globalFreq);
+    });
   </script>
 </body>
 </html>
