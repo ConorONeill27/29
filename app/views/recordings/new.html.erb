@@ -1,41 +1,146 @@
-<button id="startBtn">Start Recording</button>
-<button id="stopBtn" disabled>Stop Recording</button>
-<script>
-  const csrfToken = document.querySelector("meta[name='csrf-token']").content;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio Recorder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="<%= csrf_meta_tags %>">
 
-  let mediaRecorder;
-  let audioChunks = [];
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  document.getElementById('startBtn').addEventListener('click', async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
-    audioChunks = [];
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    mediaRecorder.addEventListener("dataavailable", event => {
-      audioChunks.push(event.data);
-    });
-    
-    mediaRecorder.addEventListener("stop", () => {
-      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-      const formData = new FormData();
-      formData.append('recording[audio]', audioBlob, 'recording.webm');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0c0f17;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
-      fetch("/recordings", {
-        method: 'POST',
-        body: formData,
-        headers: {
-          "X-CSRF-Token": csrfToken,
-        }
+    .recorder-container {
+      background: #1a1f2a;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .recorder-container h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .recorder-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .record-btn, .stop-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .record-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .record-btn:hover {
+      background-color: #218838;
+    }
+
+    .stop-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .stop-btn:hover {
+      background-color: #c82333;
+    }
+
+    .stop-btn:disabled {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+
+    .speech-output {
+      margin-top: 20px;
+      padding: 10px;
+      background: #222;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #bbb;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="recorder-container">
+    <h2>🎤 Audio Recorder</h2>
+
+    <div class="recorder-buttons">
+      <button id="startBtn" class="record-btn">Start Recording</button>
+      <button id="stopBtn" class="stop-btn" disabled>Stop Recording</button>
+    </div>
+
+    <p class="speech-output"><%= @speech %></p>
+  </div>
+
+  <script>
+    const csrfToken = document.querySelector("meta[name='csrf-token']").content;
+    let mediaRecorder;
+    let audioChunks = [];
+
+    document.getElementById('startBtn').addEventListener('click', async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      audioChunks = [];
+
+      mediaRecorder.addEventListener("dataavailable", event => {
+        audioChunks.push(event.data);
       });
-    });
-    
-    document.getElementById('stopBtn').disabled = false;
-  });
 
-  document.getElementById('stopBtn').addEventListener('click', () => {
-    mediaRecorder.stop();
-    document.getElementById('stopBtn').disabled = true;
-  });
-</script>
-<p><% @speech %></p>
+      mediaRecorder.addEventListener("stop", () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const formData = new FormData();
+        formData.append('recording[audio]', audioBlob, 'recording.webm');
+
+        fetch("/recordings", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            "X-CSRF-Token": csrfToken,
+          }
+        });
+      });
+
+      document.getElementById('stopBtn').disabled = false;
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      mediaRecorder.stop();
+      document.getElementById('stopBtn').disabled = true;
+    });
+  </script>
+</body>
+</html>

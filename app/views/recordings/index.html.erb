@@ -1,7 +1,106 @@
-<% @recordings.each do |recording| %>
- <tr>
-   <td>
-      <%= link_to recording.transcription, recording %>
-    </td>
-  </tr>
-<% end %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transcription Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0c0f17;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .transcription-container {
+      background: #1a1f2a;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .transcription-container h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* Table Styling */
+    .transcription-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .transcription-table th, .transcription-table td {
+      padding: 12px;
+      border-bottom: 1px solid #2c3445;
+    }
+
+    .transcription-table thead {
+      background-color: #5865f2;
+      color: white;
+    }
+
+    .transcription-table tr:hover {
+      background-color: #222834;
+    }
+
+    /* Links */
+    .transcription-link {
+      color: #8ab4f8;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .transcription-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="transcription-container">
+    <h2>📜 Transcriptions</h2>
+
+    <% if @recordings.empty? %>
+      <p>No transcriptions available.</p>
+    <% else %>
+      <table class="transcription-table">
+        <thead>
+          <tr>
+            <th>Transcription</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recordings.each do |recording| %>
+            <tr>
+              <td>
+                <%= link_to recording.transcription, recording, class: "transcription-link" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</body>
+</html>
