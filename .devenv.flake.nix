@@ -3,12 +3,12 @@
     let
       version = "1.4.0";
 system = "x86_64-linux";
-devenv_root = "/home/luke/Programs/group-29-hack-ireland";
+devenv_root = "/home/joe/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
-devenv_tmpdir = "/run/user/1001";
-devenv_runtime = "/run/user/1001/devenv-8cd4d84";
+devenv_tmpdir = "/run/user/1000/";
+devenv_runtime = "/run/user/1000/devenv-36d72b0";
 devenv_istesting = false;
 devenv_direnvrc_latest_version = 1;
 
@@ -26,12 +26,12 @@ devenv_direnvrc_latest_version = 1;
         let
           version = "1.4.0";
 system = "x86_64-linux";
-devenv_root = "/home/luke/Programs/group-29-hack-ireland";
+devenv_root = "/home/joe/29";
 devenv_dotfile = ./.devenv;
 devenv_dotfile_string = ".devenv";
 container_name = null;
-devenv_tmpdir = "/run/user/1001";
-devenv_runtime = "/run/user/1001/devenv-8cd4d84";
+devenv_tmpdir = "/run/user/1000/";
+devenv_runtime = "/run/user/1000/devenv-36d72b0";
 devenv_istesting = false;
 devenv_direnvrc_latest_version = 1;
 

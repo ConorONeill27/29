@@ -1,11 +1,105 @@
-<section class="hero">
-  <h1>Bundles!</h1>
-  <p>
-    Take notes collaboratively (or alone!) and chat about what&rsquo;s inside with Bundles, <b>the notebook that talks back.</b> Perfect for business, school or home use!
-  </p>
-  <div class="hero-buttons">
-    <a href="#My Notebooks" class="btn">My Notebooks</a>
-   <!-- <a href="#schedule" class="btn">Schedule a Demo</a> -->
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bundles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Rails essentials -->
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
 
-</section>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
+  <style>
+    /* GLOBAL STYLES */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0c0f17, #000); color: #fff; overflow-x: hidden; }
+
+    /* NAVIGATION BAR */
+    nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: transparent; }
+    .nav-left, .nav-right { display: flex; align-items: center; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: #fff; margin-right: 2rem; }
+    .nav-links a { margin-right: 1.5rem; text-decoration: none; color: #ccc; font-weight: 500; transition: color 0.2s ease; }
+    .nav-links a:hover { color: #fff; }
+    .demo-btn { text-decoration: none; padding: 0.6rem 1.2rem; border: 2px solid #5865f2; border-radius: 6px; color: #fff; font-weight: 500; transition: background-color 0.3s ease; }
+    .demo-btn:hover { background-color: #5865f2; }
+
+    /* HERO SECTION WITH MAJESTIC TITLE */
+    #homepage-hero { 
+      margin-top: 80px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center; 
+      min-height: calc(100vh - 80px);
+    }
+    #homepage-hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeInTitle 2s ease-in-out;
+    }
+    #homepage-hero p {
+      max-width: 600px;
+      margin-bottom: 2rem;
+      color: #ccc;
+      font-size: 1.2rem;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
+    .btn { background-color: #fff; color: #000; padding: 0.8rem 1.5rem; border-radius: 6px; text-decoration: none; transition: background-color 0.3s ease; }
+    .btn:hover { background-color: #ccc; }
+
+    /* Animation for Title */
+    @keyframes fadeInTitle {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      #homepage-hero h1 { font-size: 2.5rem; }
+      #homepage-hero p { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">Bundles</div>
+      <div class="nav-links">
+        <%= link_to "Solutions", root_path(anchor: "solutions"), data: { turbo: false } %>
+        <%= link_to "Industries", root_path(anchor: "industries"), data: { turbo: false } %>
+        <%= link_to "About Us", about_us_path, data: { turbo: false } %>
+      </div>
+    </div>
+    <div class="nav-right">
+      <%= link_to "My Hub", my_hub_path, class: "demo-btn", data: { turbo: false } %>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION WITH MAJESTIC TITLE -->
+  <section id="homepage-hero">
+    <h1>Research via Bundles</h1>
+    <p>Streamline your research workflow with powerful tools and seamless integrations designed for modern teams.</p>
+    <div class="hero-buttons">
+      <a href="#explore" class="btn">Explore Research Tools</a>
+      <a href="#schedule" class="btn">Get Started Now</a>
+    </div>
+  </section>
+
+  <!-- DYNAMIC CONTENT -->
+  <%= yield %>
+</body>
+</html>
+
