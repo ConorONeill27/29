@@ -1,110 +1,0 @@
-U:RDoc::NormalModule[iI"Streaming:ETI" ActionController::Streaming;T0o:RDoc::Markup::Document:@parts[o;;[@S:RDoc::Markup::Heading:
-leveli:	textI" Action Controller Streaming;To:RDoc::Markup::Paragraph;[I"IAllows views to be streamed back to the client as they are rendered.;To;;[I"–By default, Rails renders views by first rendering the template and then the
-layout. The response is sent to the client after the whole template is
-rendered, all queries are made, and the layout is processed.;To;;[I"8Streaming inverts the rendering flow by rendering the layout first and
-subsequently each part of the layout as they are processed. This allows the
-header of the HTML (which is usually in the layout) to be streamed back to
-client very quickly, enabling JavaScripts and stylesheets to be loaded earlier
-than usual.;To;;[I"ùSeveral Rack middlewares may not work and you need to be careful when
-streaming. This is covered in more detail below, see the Streaming@Middlewares
-section.;To;;[I"àStreaming can be added to a given template easily, all you need to do is to
-pass the <code>:stream</code> option to <code>render</code>.;To:RDoc::Markup::Verbatim;[I"class PostsController
-;TI"  def index
-;TI"    @posts = Post.all
-;TI"    render stream: true
-;TI"  end
-;TI"	end
-;T:@format0S;	;
-i;I"When to use streaming;To;;[I"‹Streaming may be considered to be overkill for lightweight actions like <code>new</code>
-or <code>edit</code>. The real benefit of streaming is on expensive actions that, for
-example, do a lot of queries on the database.;To;;[I"äIn such actions, you want to delay queries execution as much as you can. For
-example, imagine the following <code>dashboard</code> action:;To;;[
-I"def dashboard
-;TI"  @posts = Post.all
-;TI"  @pages = Page.all
-;TI"  @articles = Article.all
-;TI"	end
-;T;0o;;[I"}Most of the queries here are happening in the controller. In order to benefit
-from streaming you would want to rewrite it as:;To;;[I"def dashboard
-;TI"-  # Allow lazy execution of the queries
-;TI"  @posts = Post.all
-;TI"  @pages = Page.all
-;TI"  @articles = Article.all
-;TI"  render stream: true
-;TI"	end
-;T;0o;;[I"ìNotice that <code>:stream</code> only works with templates. Rendering <code>:json</code> or <code>:xml</code>
-with <code>:stream</code> won't work.;TS;	;
-i;I".Communication between layout and template;To;;[I"´When streaming, rendering happens top-down instead of inside-out. Rails starts
-with the layout, and the template is rendered later, when its <code>yield</code> is
-reached.;To;;[I"dThis means that, if your application currently relies on instance variables
-set in the template to be used in the layout, they won't work once you move to
-streaming. The proper way to communicate between layout and template,
-regardless of whether you use streaming or not, is by using <code>content_for</code>,
-<code>provide</code>, and <code>yield</code>.;To;;[I"\Take a simple example where the layout expects the template to tell which
-title to use:;To;;[	I"<html>
-;TI"7  <head><title><%= yield :title %></title></head>
-;TI"!  <body><%= yield %></body>
-;TI"</html>
-;T;0o;;[I"RYou would use <code>content_for</code> in your template to specify the title:;To;;[I"'<%= content_for :title, "Main" %>
-;TI"Hello
-;T;0o;;[I"#And the final result would be:;To;;[	I"<html>
-;TI"(  <head><title>Main</title></head>
-;TI"  <body>Hello</body>
-;TI"</html>
-;T;0o;;[I"¢However, if <code>content_for</code> is called several times, the final result would have
-all calls concatenated. For instance, if we have the following template:;To;;[I"'<%= content_for :title, "Main" %>
-;TI"Hello
-;TI"(<%= content_for :title, " page" %>
-;T;0o;;[I"The final result would be:;To;;[	I"<html>
-;TI"-  <head><title>Main page</title></head>
-;TI"  <body>Hello</body>
-;TI"</html>
-;T;0o;;[I"»This means that, if you have <code>yield :title</code> in your layout and you want to use
-streaming, you would have to render the whole template (and eventually trigger
-all queries) before streaming the title and all assets, which defeats the
-purpose of streaming. Alternatively, you can use a helper called <code>provide</code>
-that does the same as <code>content_for</code> but tells the layout to stop searching for
-other entries and continue rendering.;To;;[I"JFor instance, the template above using <code>provide</code> would be:;To;;[I"#<%= provide :title, "Main" %>
-;TI"Hello
-;TI"(<%= content_for :title, " page" %>
-;T;0o;;[I"Resulting in:;To;;[	I"<html>
-;TI"(  <head><title>Main</title></head>
-;TI"  <body>Hello</body>
-;TI"</html>
-;T;0o;;[I"éThat said, when streaming, you need to properly check your templates and
-choose when to use <code>provide</code> and <code>content_for</code>.;To;;[I"FSee also ActionView::Helpers::CaptureHelper for more information.;TS;	;
-i;I")Headers, cookies, session, and flash;To;;[I"„When streaming, the HTTP headers are sent to the client right before it
-renders the first line. This means that, modifying headers, cookies, session
-or flash after the template starts rendering will not propagate to the client.;TS;	;
-i;I"Middlewares;To;;[I"Middlewares that need to manipulate the body won't work with streaming. You
-should disable those middlewares whenever streaming in development or
-production. For instance, <code>Rack::Bug</code> won't work when streaming as it needs to
-inject contents in the HTML body.;To;;[I"∂Also <code>Rack::Cache</code> won't work with streaming as it does not support streaming
-bodies yet. Whenever streaming <code>Cache-Control</code> is automatically set to
-"no-cache".;TS;	;
-i;I"Errors;To;;[I"‘When it comes to streaming, exceptions get a bit more complicated. This
-happens because part of the template was already rendered and streamed to the
-client, making it impossible to render a whole exception page.;To;;[I"vCurrently, when an exception happens in development or production, Rails will
-automatically stream to the client:;To;;[I"="><script>window.location = "/500.html"</script></html>
-;T;0o;;[I"¿The first two characters (<code>"></code>) are required in case the exception happens
-while rendering attributes for a given tag. You can check the real cause for
-the exception in your logger.;TS;	;
-i;I"Web server support;To;;[I"oNot all web servers support streaming out-of-the-box. You need to check the
-instructions for each of them.;TS;	;
-i	;I"Unicorn;To;;[I"tUnicorn supports streaming but it needs to be configured. For this, you need
-to create a config file as follow:;To;;[I"# unicorn.config.rb
-;TI"$listen 3000, tcp_nopush: false
-;T;0o;;[I""And use it on initialization:;To;;[I"3unicorn_rails --config-file unicorn.config.rb
-;T;0o;;[I"TYou may also want to configure other parameters like <code>:tcp_nodelay</code>.;To;;[I"ÄFor more information, please check the
-[documentation](https://bogomips.org/unicorn/Unicorn/Configurator.html#method-
-i-listen).;To;;[I"xIf you are using Unicorn with NGINX, you may need to tweak NGINX. Streaming
-should work out of the box on Rainbows.;TS;	;
-i	;I"Passenger;To;;[I"RPhusion Passenger with NGINX, offers two streaming mechanisms out of the box.;To:RDoc::Markup::List:
-@type:NUMBER:@items[o:RDoc::Markup::ListItem:@label0;[o;;[I"áNGINX response buffering mechanism which is dependent on the value of
-<code>passenger_buffer_response</code> option (default is "off").;To;;0;[o;;[I"yPassenger buffering system which is always 'on' irrespective of the value
-of <code>passenger_buffer_response</code>.;To;;[I"æWhen <code>passenger_buffer_response</code> is turned "on", then streaming would be done
-at the NGINX level which waits until the application is done sending the
-response back to the client.;To;;[I"úFor more information, please check the [documentation]
-(https://www.phusionpassenger.com/docs/references/config_reference/nginx/#passenger_buffer_response).;T:
-@fileI"-lib/action_controller/metal/streaming.rb;T:0@omit_headings_from_table_of_contents_below0;0;0[ [ [ [[I"
-class;T[[:public[ [:protected[ [:private[ [I"instance;T[[;[ [;[ [;[[I"_process_options;TI"-lib/action_controller/metal/streaming.rb;T[I"_render_template;T@Û[ [U:RDoc::Context::Section[i 0o;;[ ;0;0[@⁄I"ActionController;TcRDoc::NormalModule
