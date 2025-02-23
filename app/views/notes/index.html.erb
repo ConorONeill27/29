@@ -2,118 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>New Note - Bundles</title>
+  <title>New Note - My Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Font -->
+  <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-
-  <!-- SimpleMDE (Markdown Editor) CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0c0f17, #000);
-      color: #fff;
-      padding: 20px;
-      height: 100vh;
+      background-color: #f7f7f8;
+      color: #1a1a1a;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .header {
+    /* Navigation Bar */
+    .nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-    }
-
-    .btn {
-      text-decoration: none;
-      padding: 0.6rem 1.5rem;
-      border-radius: 6px;
-      font-weight: 600;
-      border: 2px solid #5865f2;
-      color: #fff;
-      background-color: transparent;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
-    }
-
-    .btn:hover {
+    .nav .logo { font-size: 1.4rem; font-weight: 700; }
+    .nav .actions button {
+      padding: 0.6rem 1.2rem;
       background-color: #5865f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
     }
+    .nav .actions button:hover { background-color: #4752d0; }
 
-    /* Editor Container */
+    /* Editor Section */
     .editor-container {
       flex: 1;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      overflow-y: auto;
+    }
+    .editor-container input.title {
+      width: 100%;
+      border: none;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      outline: none;
+    }
+    .editor-container textarea.content {
+      width: 100%;
+      border: none;
+      min-height: 60vh;
+      resize: none;
+      font-size: 1rem;
+      line-height: 1.6;
+      outline: none;
+      padding: 1rem;
+    }
+    .editor-container textarea::placeholder {
+      color: #b0b0b0;
+      font-style: italic;
     }
 
-    /* Responsive Adjustments */
+    /* Responsive Design */
     @media (max-width: 768px) {
-      .header h1 { font-size: 1.5rem; }
+      .editor-container { margin: 1rem; padding: 1.5rem; }
+      .editor-container input.title { font-size: 1.5rem; }
     }
   </style>
 </head>
+
 <body>
-
-  <!-- HEADER -->
-  <div class="header">
-    <h1>📝 New Note Editor</h1>
-    <div>
-      <a href="/" class="btn">← Back to My Hub</a>
-      <button id="save-btn" class="btn">💾 Save Note</button>
+  <!-- Navigation Bar -->
+  <nav class="nav">
+    <div class="logo">✍️ New Note</div>
+    <div class="actions">
+      <button onclick="saveNote()">Save Note</button>
+      <button onclick="window.location.href='/'">Back to My Hub</button>
     </div>
-  </div>
+  </nav>
 
-  <!-- MARKDOWN EDITOR AREA -->
+  <!-- Editor Section -->
   <div class="editor-container">
-    <textarea id="markdown-editor"></textarea>
+    <input class="title" type="text" placeholder="Title your note...">
+    <textarea class="content" placeholder="Start writing your ideas, notes, or plans here..."></textarea>
   </div>
 
-  <!-- SimpleMDE (Markdown Editor) JS -->
-  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-
-  <!-- FILE SAVING LOGIC -->
   <script>
-    // Initialize the Markdown Editor
-    const simplemde = new SimpleMDE({
-      element: document.getElementById("markdown-editor"),
-      placeholder: "Start typing your Markdown note here...",
-      spellChecker: false,
-      autosave: {
-        enabled: true,
-        uniqueId: "markdown-note",
-        delay: 1000,
-      },
-      previewRender: function(plainText) {
-        return SimpleMDE.prototype.markdown(plainText); // Live preview
-      },
-    });
+    function saveNote() {
+      const title = document.querySelector('.title').value.trim();
+      const content = document.querySelector('.content').value.trim();
 
-    // Function to download Markdown content as a .md file
-    document.getElementById("save-btn").addEventListener("click", function() {
-      const content = simplemde.value();
-      const filename = prompt("Save as (include .md at end):", "new_note.md") || "note.md";
+      if (!title || !content) {
+        alert('🚨 Title and content cannot be empty!');
+        return;
+      }
 
-      const blob = new Blob([content], { type: "text/markdown;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-    });
+      console.log("Saving note:", { title, content }); 
+      alert('✅ Note saved successfully!');
+      window.location.href = "/my_hub";  // Redirect after save
+    }
   </script>
-
 </body>
 </html>
