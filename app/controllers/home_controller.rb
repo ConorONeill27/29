@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
+  allow_unauthenticated_access(only: :index)
+
   def index
-    # This action renders the homepage.
-    # You can set instance variables here if needed.
   end
 end
-

@@ -263,6 +263,11 @@
         <li><a href="#">E-commerce</a></li>
         <li><a href="#">Social Media</a></li>
       </ul>
+
+      </br>
+      </br>
+
+      <%= link_to "Log Out", session_path, method: :delete, class: "logout-btn", data: { turbo: false } %>
     </aside>
 
  <!-- MAIN GRID CONTENT (Sidebar Cards) -->
@@ -270,55 +275,55 @@
   <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
     <!-- Example card for Alice Brown -->
     
-    <a href="/employee_notes/1" class="card">
+    <a href="/profiles/1" class="card">
       <img src="https://miro.medium.com/v2/resize:fit:1400/1*HNDhCUJGGFUMdhSeKteWJA.png" alt="Alice Brown Avatar" class="card-avatar">
       <div class="card-title">Alice Brown</div>
       <div class="card-desc">HR Specialist</div>
     </a>
     <!-- Example card for Bob Johnson -->
-    <a href="/employee_notes/2" class="card">
+    <a href="/profiles/2" class="card">
       <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/b2e29994-2acc-464b-b2d0-20036b4f41cb/cd880067-5ea7-4de1-8be6-46575d608796.png" alt="Bob Johnson Avatar" class="card-avatar">
       <div class="card-title">Bob Johnson</div>
       <div class="card-desc">Finance Expert</div>
     </a>
     <!-- Example card for Catherine Li -->
-    <a href="/employee_notes/3" class="card">
+    <a href="/profiles/3" class="card">
       <img src="https://images.tech.co/wp-content/uploads/2024/04/17123134/AdobeStock_657290983-1-min.jpeg" alt="Catherine Li Avatar" class="card-avatar">
       <div class="card-title">Catherine Li</div>
       <div class="card-desc">Marketing Specialist</div>
     </a>
     <!-- Additional 7 cards -->
-    <a href="/employee_notes/4" class="card">
+    <a href="/profiles/4" class="card">
       <img src="https://cdn.prod.website-files.com/5fd2ba952bcd68835f2c8254/6789575e8faf4908de0d32f4_20916742-0.webp" alt="David Smith Avatar" class="card-avatar">
       <div class="card-title">David Smith</div>
       <div class="card-desc">Product Manager</div>
     </a>
-    <a href="/employee_notes/5" class="card">
+    <a href="/profiles/5" class="card">
       <img src="https://cdn.prod.website-files.com/5fd2ba952bcd68835f2c8254/65a5cf3ebf8d7e43e8c77962_ai-generated-headshot-example.webp" alt="Emma Davis Avatar" class="card-avatar">
       <div class="card-title">Emma Davis</div>
       <div class="card-desc">UX Designer</div>
     </a>
-    <a href="/employee_notes/6" class="card">
+    <a href="/profiles/6" class="card">
       <img src="https://www.denverheadshotco.com/wp-content/uploads/2023/06/dhc-coporate-headshots-hero-1.jpg" alt="Frank Miller Avatar" class="card-avatar">
       <div class="card-title">Frank Miller</div>
       <div class="card-desc">Software Developer</div>
     </a>
-    <a href="/employee_notes/7" class="card">
+    <a href="/profiles/7" class="card">
       <img src="https://www.briefcasecoach.com/wp-content/uploads/2024/09/Screen-Shot-2024-09-04-at-3.08.38-PM-1-1024x905.png" alt="Grace Lee Avatar" class="card-avatar">
       <div class="card-title">Grace Lee</div>
       <div class="card-desc">Operations Lead</div>
     </a>
-    <a href="/employee_notes/8" class="card">
+    <a href="/profiles/8" class="card">
       <img src="https://image13.photobiz.com/10309/12_20240417102146_12845125_large.jpg" alt="Henry Wilson Avatar" class="card-avatar">
       <div class="card-title">Henry Wilson</div>
       <div class="card-desc">Data Scientist</div>
     </a>
-    <a href="/employee_notes/9" class="card">
+    <a href="/profiles/9" class="card">
       <img src="https://brightspark-consulting.com/wp-content/uploads/2023/05/Screenshot-2023-05-05-at-11.55.47.png" alt="Isabella Martinez Avatar" class="card-avatar">
       <div class="card-title">Isabella Martinez</div>
       <div class="card-desc">Sales Director</div>
     </a>
-    <a href="/employee_notes/10" class="card">
+    <a href="/profiles/10" class="card">
       <img src="https://pbs.twimg.com/profile_images/1080456670684332032/7-4OAu7I_400x400.jpg" alt="Jack Thompson Avatar" class="card-avatar">
       <div class="card-title">Des Traynor</div>
       <div class="card-desc">Unpaid Intern</div>
