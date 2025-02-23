@@ -58,6 +58,7 @@ class OrganizationsController < ApplicationController
   private
 
   def organization_params
-    params.require(:organization).permit(:name).permit(:oid).permit(:uid)
+    params.require(:organization).permit(:name, :oid, :uid)
   end
+  
 end

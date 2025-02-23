@@ -482,6 +482,7 @@
       docs.forEach(doc => {
         const currentDocId = docId++;
         nodes.add({ 
+          filePath: `/Employee_Notes/${doc.name}`, // Store file path in node metadata //MIGHT NOT WORK
           id: currentDocId, 
           label: doc.name, 
           fullLabel: doc.name, 
@@ -561,6 +562,17 @@
         interaction: { hover: true }
       };
       const network = new vis.Network(container, data, options);
+      network.on('click', function(params) {
+    if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const node = nodes.get(nodeId);
+
+    if (node.type === 'document' && node.filePath) {
+      window.open(node.filePath, '_blank'); // Open file in new tab
+    }
+  }
+});
+
 
       let scheduledUpdate = false;
       let pendingScale = network.getScale();
