@@ -1,3 +1,4 @@
+<!-- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,48 +9,68 @@
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     #chat-container {
-      background: #fff;
-      border: 1px solid #ccc;
+      background: #1e2a38; /* Dark blue pastel */
+      border: 1px solid #2f3b4c;
       padding: 15px;
-      max-width: 600px;
-      margin: 0 auto;
-      border-radius: 5px;
+      width: 400px;
+      height: 500px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
     }
     #chat-log {
-      height: 300px;
+      height: 80%;
       overflow-y: auto;
-      border: 1px solid #ddd;
+      border: 1px solid #34495e;
       padding: 10px;
       margin-bottom: 15px;
-      background-color: #fafafa;
+      background-color: #273746;
+      border-radius: 6px;
+      color: #ecf0f1;
     }
-    .message {
-      margin-bottom: 10px;
-    }
-    .user {
-      color: blue;
-    }
-    .bot {
-      color: green;
-    }
+    .message { margin-bottom: 10px; }
+    .user { color: #85c1e9; }
+    .bot { color: #82e0aa; }
     #user-input {
-      width: 80%;
+      width: 75%;
       padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      background-color: #34495e;
+      color: #ecf0f1;
     }
     #send-button {
       padding: 10px 15px;
-      font-size: 16px;
+      font-size: 14px;
+      background-color: #5dade2;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
+    #send-button:hover { background-color: #5499c7; }
   </style>
 </head>
 <body>
   <div id="chat-container">
     <div id="chat-log"></div>
-    <input type="text" id="user-input" placeholder="Type your message..." />
-    <button id="send-button">Send</button>
+    <div style="display: flex;">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button id="send-button">Send</button>
+    </div>
   </div>
 
   <script>
@@ -96,10 +117,9 @@
     });
 
     userInput.addEventListener('keyup', (event) => {
-      if (event.key === 'Enter') {
-        sendButton.click();
-      }
+      if (event.key === 'Enter') sendButton.click();
     });
   </script>
 </body>
 </html>
+-->

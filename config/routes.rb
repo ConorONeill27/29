@@ -21,7 +21,8 @@ Rails.application.routes.draw do
   get '/graph', to: 'graph#index'
   get "/about_us", to: "about_us#index", as: :about_us
   get "/my_hub", to: "my_hubs#index", as: :my_hub
-
+    post "/my_hub/chat_message", to: "my_hubs#chat_message"
+  
   resources :organizations
   resources :notes
   resources :profiles

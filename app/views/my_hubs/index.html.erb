@@ -110,9 +110,19 @@
     .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
     .card-title { font-weight: 600; margin-bottom: 0.5rem; }
     .card-desc { font-size: 0.9rem; color: #ccc; }
+
+   /* CHATBOX */
+    #chat-container {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 350px; background: #1a1f2a; border-radius: 10px;
+      padding: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); z-index: 200;
+    }
+    #chat-log { height: 250px; overflow-y: auto; padding: 10px; background-color: #20252f; border-radius: 5px; margin-bottom: 10px; color: #fff; }
+    #user-input { width: 70%; padding: 10px; border-radius: 5px; background-color: #2a2f3a; border: none; color: white; }
+    #send-button { width: 25%; padding: 10px; border-radius: 5px; border: none; background-color: #5865f2; color: white; cursor: pointer; }
+    #send-button:hover { background-color: #4752c4; }
   </style>
 </head>
-
 <body>
   <!-- TOP NAVIGATION -->
   <header class="top-nav">
@@ -169,5 +179,57 @@
       </div>
     </main>
   </div>
+
+<!-- CHATBOX SECTION -->
+  <div id="chat-container">
+    <div id="chat-log"></div>
+    <input type="text" id="user-input" placeholder="Ask me something...">
+    <button id="send-button">Send</button>
+  </div>
+
+  <script>
+    const chatLog = document.getElementById('chat-log');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+
+    function appendMessage(sender, text) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', sender);
+      messageDiv.textContent = `${sender === 'user' ? 'You' : 'Bot'}: ${text}`;
+      chatLog.appendChild(messageDiv);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    async function sendMessage(message) {
+      appendMessage('user', message);
+      try {
+        const response = await fetch('<%= my_hub_chat_message_path %>', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+          },
+          body: JSON.stringify({ message: message })
+        });
+        const data = await response.json();
+        appendMessage('bot', data.reply || 'No reply received.');
+      } catch (error) {
+        appendMessage('bot', `Error: ${error.message}`);
+      }
+    }
+
+    sendButton.addEventListener('click', () => {
+      const message = userInput.value.trim();
+      if (message) {
+        sendMessage(message);
+        userInput.value = '';
+      }
+    });
+
+    userInput.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') sendButton.click();
+    });
+
+
 </body>
 </html>
