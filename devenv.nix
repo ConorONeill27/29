@@ -5,10 +5,15 @@
     pkg-config
     libyaml.dev
     openssl.dev
+    libffi
+    zlib
+    libxml2.dev
+    libxslt.dev
+    libxcrypt
   ];
 
   enterShell = ''
-    git --version
+    whisper-cpp-download-ggml-model base.en
     ruby --version
     bundle
   '';

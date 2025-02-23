@@ -1,3 +1,5 @@
+require 'markdoc'
+
 class NotesController < ApplicationController
   def index
     @notes = Note.all
@@ -5,7 +7,10 @@ class NotesController < ApplicationController
 
   def show
     @note = Note.find(params[:id])
+    raw_markdown = params[:content]
+    @html = Markdoc.to_html(raw_markdown)
   end
+
 
   def new
     @note = Note.new
@@ -38,6 +43,8 @@ class NotesController < ApplicationController
     @note.destroy
     redirect_to note_url, notice: "Note was successfully destroyed."
   end
+
+ 
 
   private
 

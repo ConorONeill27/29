@@ -9,17 +9,56 @@
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="https://unpkg.com/compromise"></script>
 
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
     <%= javascript_include_tag 'application' %>
 
-    <%= yield :head %>
+  <style>
+    /* GLOBAL STYLES */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0c0f17, #000); color: #fff; overflow-x: hidden; }
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-  </head>
+    /* NAVIGATION BAR */
+    nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: transparent; }
+    .nav-left, .nav-right { display: flex; align-items: center; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: #fff; margin-right: 2rem; }
+    .nav-links a { margin-right: 1.5rem; text-decoration: none; color: #ccc; font-weight: 500; transition: color 0.2s ease; }
+    .nav-links a:hover { color: #fff; }
+    .demo-btn { text-decoration: none; padding: 0.6rem 1.2rem; border: 2px solid #5865f2; border-radius: 6px; color: #fff; font-weight: 500; transition: background-color 0.3s ease; }
+    .demo-btn:hover { background-color: #5865f2; }
 
-  <body>
-    <%= yield %>
-  </body>
+    /* HERO SECTION */
+    #homepage-hero { margin-top: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: calc(100vh - 80px); }
+    #homepage-hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+    #homepage-hero p { max-width: 600px; margin-bottom: 2rem; color: #ccc; }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
+    .btn { background-color: #fff; color: #000; padding: 0.8rem 1.5rem; border-radius: 6px; text-decoration: none; transition: background-color 0.3s ease; }
+    .btn:hover { background-color: #ccc; }
+  </style>
+    <%= javascript_importmap_tags %>
+</head>
+
+<body>
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">Bundles</div>
+      <div class="nav-links">
+        <%= link_to "Solutions", root_path(anchor: "solutions"), data: { turbo: false } %>
+        <%= link_to "Industries", root_path(anchor: "industries"), data: { turbo: false } %>
+        <%= link_to "About Us", about_us_path, data: { turbo: false } %>
+      </div>
+    </div>
+    <div class="nav-right">
+      <%= link_to "My Hub", my_hub_path, class: "demo-btn", data: { turbo: false } %>
+    </div>
+  </nav>
+
+  <!-- DYNAMIC CONTENT -->
+  <%= yield %>
+</body>
 </html>

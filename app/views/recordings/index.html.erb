@@ -1,0 +1,7 @@
+<% @recordings.each do |recording| %>
+ <tr>
+   <td>
+      <%= link_to recording.transcription, recording %>
+    </td>
+  </tr>
+<% end %>

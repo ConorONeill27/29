@@ -1,61 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>My Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Using Google Font "Inter" -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
   <style>
     /* GLOBAL STYLES */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0c0f17, #000);
-      color: #fff;
-      position: relative;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0c0f17, #000); color: #fff; }
+
     /* FIXED TOP NAVIGATION BAR */
     .top-nav {
+      position: fixed;
+      top: 0; left: 0;
       width: 100%;
-      background-color: #14161c;
-      padding: 1rem 2rem;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #444;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 10;
+      padding: 0 2rem;
+      background-color: #14161c;
+      z-index: 100;
     }
-    .top-nav .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    .top-nav .nav-links a {
-      margin-right: 1rem;
+    .top-nav .logo { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .top-nav .nav-links a, .top-nav .actions a {
+      margin-right: 1.5rem;
       text-decoration: none;
-      color: #ccc;
+      color: #aaa;
       font-weight: 500;
       transition: color 0.2s ease;
     }
-    .top-nav .nav-links a:hover {
-      color: #fff;
-    }
-    .top-nav .demo-btn {
-      text-decoration: none;
+    .top-nav .nav-links a:hover, .top-nav .actions a:hover { color: #fff; }
+    .demo-btn {
       padding: 0.5rem 1rem;
       border: 2px solid #5865f2;
       border-radius: 6px;
@@ -63,92 +44,57 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
     }
-    .top-nav .demo-btn:hover {
-      background-color: #5865f2;
-    }
-    /* CONTENT BELOW TOP NAV */
+    .demo-btn:hover { background-color: #5865f2; }
+
+    /* CONTENT STRUCTURE */
     .content {
       display: flex;
       flex: 1;
-      margin-top: 80px; /* Space for fixed nav */
+      padding-top: 60px; /* Adjust for fixed nav height */
+      height: calc(100vh - 60px);
     }
+
     /* SIDEBAR */
     .sidebar {
       width: 250px;
       background-color: #14161c;
       padding: 1rem;
       overflow-y: auto;
+      height: 100%;
     }
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li {
-      margin-bottom: 0.75rem;
-    }
-    .sidebar a {
-      text-decoration: none;
-      color: #aaa;
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-    .sidebar a:hover {
-      color: #fff;
-    }
+    .sidebar h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li { margin-bottom: 0.75rem; }
+    .sidebar a { text-decoration: none; color: #aaa; transition: color 0.2s ease; }
+    .sidebar a:hover { color: #fff; }
+
     /* MAIN CONTENT AREA */
     .main-content {
       flex: 1;
       padding: 1rem 2rem;
-      position: relative;
       overflow-y: auto;
+      position: relative;
     }
-    /* STARFIELD BACKGROUND (non-uniform, subtle, distant stars) */
-    .main-content::before {
+
+    /* DOT GRID BACKGROUND */
+    .grid-background::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 2px;
-      height: 2px;
-      background: rgba(255,255,255,0.15);
-      /* Simulate a random starfield using box-shadow.
-         You can add or adjust coordinates for more stars. */
-      box-shadow:
-        30px 50px,
-        90px 120px,
-        150px 80px,
-        210px 200px,
-        275px 65px,
-        330px 140px,
-        390px 100px,
-        450px 220px,
-        512px 40px,
-        570px 180px,
-        630px 130px,
-        690px 90px,
-        750px 210px,
-        812px 70px,
-        870px 160px,
-        935px 45px,
-        1000px 170px,
-        1075px 95px,
-        1130px 220px,
-        1190px 130px,
-        1250px 80px,
-        1310px 190px;
-      z-index: 1;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(#ccc 1px, transparent 1px), radial-gradient(#ccc 1px, transparent 1px);
+      background-position: 0 0, 10px 10px;
+      background-size: 20px 20px;
+      opacity: 0.2;
+      z-index: -1;
     }
-    /* GRID OF CLICKABLE CARDS */
+
+    /* GRID OF CARDS */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1rem;
-      margin-top: 1rem;
-      position: relative;
-      z-index: 2; /* Above the starfield */
+      z-index: 2;
     }
     .card {
       background-color: #1a1f2a;
@@ -157,32 +103,17 @@
       text-decoration: none;
       color: #fff;
       transition: background-color 0.3s ease, transform 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       text-align: center;
     }
-    .card:hover {
-      background-color: #2a2f3a;
-      transform: translateY(-2px);
-    }
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-    }
-    .card-title {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-    .card-desc {
-      font-size: 0.9rem;
-      color: #ccc;
-      line-height: 1.4;
-    }
+    .card:hover { background-color: #2a2f3a; transform: translateY(-2px); }
+    .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .card-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .card-desc { font-size: 0.9rem; color: #ccc; }
   </style>
 </head>
+
 <body>
-  <!-- FIXED TOP NAVIGATION BAR -->
+  <!-- TOP NAVIGATION -->
   <header class="top-nav">
     <div class="logo">My Hub</div>
     <div class="nav-links">
@@ -195,7 +126,7 @@
     </div>
   </header>
 
-  <!-- CONTENT AREA -->
+  <!-- MAIN CONTENT STRUCTURE -->
   <div class="content">
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -217,70 +148,30 @@
         <li><a href="#">Social Media</a></li>
       </ul>
     </aside>
-    
-    <!-- MAIN CONTENT WITH STARFIELD BACKGROUND -->
-    <main class="main-content">
+
+    <!-- MAIN GRID CONTENT -->
+    <main class="main-content grid-background">
       <div class="grid">
-        <!-- Each card represents a coworker. Replace # with the actual routes -->
+        <!-- Clickable coworker cards -->
         <a href="#" class="card">
           <div class="card-icon">👩</div>
           <div class="card-title">Alice Brown</div>
-          <div class="card-desc">Lead Engineer with 5 years of experience in AI and ML solutions.</div>
+          <div class="card-desc">Lead Engineer in AI and ML solutions.</div>
         </a>
         <a href="#" class="card">
           <div class="card-icon">👨</div>
           <div class="card-title">Bob Johnson</div>
-          <div class="card-desc">Product Manager focusing on user-centric designs and roadmaps.</div>
+          <div class="card-desc">Product Manager focusing on design.</div>
         </a>
         <a href="#" class="card">
           <div class="card-icon">👩</div>
           <div class="card-title">Catherine Li</div>
-          <div class="card-desc">Marketing Specialist delivering high-impact campaigns worldwide.</div>
+          <div class="card-desc">Marketing Specialist with global impact.</div>
         </a>
         <a href="#" class="card">
           <div class="card-icon">👨</div>
           <div class="card-title">Daniel Ortiz</div>
-          <div class="card-desc">DevOps guru ensuring seamless integrations and cloud migrations.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Elena Garcia</div>
-          <div class="card-desc">HR coordinator streamlining recruitment and retention strategies.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Frank Wilson</div>
-          <div class="card-desc">Sales Executive pushing global expansion and partnership growth.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Grace Kim</div>
-          <div class="card-desc">UI/UX Designer crafting engaging user experiences and flows.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Henry Park</div>
-          <div class="card-desc">Finance analyst optimizing budgets and forecasting for success.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Ivy Nguyen</div>
-          <div class="card-desc">Customer Support lead ensuring top-notch client satisfaction.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Jack Thompson</div>
-          <div class="card-desc">Security engineer safeguarding infrastructure and data privacy.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Karen Lee</div>
-          <div class="card-desc">E-commerce strategist boosting online sales and conversions.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Leo Foster</div>
-          <div class="card-desc">Social Media coordinator driving engagement across platforms.</div>
+          <div class="card-desc">DevOps expert for cloud migrations.</div>
         </a>
       </div>
     </main>
