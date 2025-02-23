@@ -19,7 +19,11 @@
       background-color: #14161c;
       z-index: 100;
     }
-    .top-nav .logo { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .top-nav .logo { 
+      font-size: 1.5rem; 
+      font-weight: 700; 
+      color: #fff; 
+    }
     .top-nav .nav-links a, .top-nav .actions a {
       margin-right: 1.5rem;
       text-decoration: none;
@@ -45,6 +49,8 @@
       flex: 1;
       padding-top: 60px; /* Adjust for fixed nav height */
       height: calc(100vh - 60px);
+      justify-content: center;
+      align-items: center;
     }
 
     /* SIDEBAR */
@@ -67,9 +73,13 @@
       padding: 1rem 2rem;
       overflow-y: auto;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* DOT GRID BACKGROUND */
+    /* CENTERED GRAPH SECTION (with dot grid background) */
     .grid-background::before {
       content: "";
       position: absolute;
@@ -81,8 +91,60 @@
       opacity: 0.2;
       z-index: -1;
     }
+    #graph-section {
+      width: 85%;
+      height: 80vh;
+      background: #1a1f2a;
+      border: 1px solid #34495e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #controls {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #14161c;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      text-align: center;
+      color: #fff;
+    }
+    #controls input {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #5865f2;
+      background: #14161c;
+      color: #fff;
+      width: 100%;
+    }
+    #fullscreenButton {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      background-color: #5865f2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #fullscreenButton:hover { background-color: #4752d0; }
+    #network {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      background: #20252f;
+      border: 2px solid #5865f2;
+    }
+    #legend {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #6c757d;
+    }
 
-    /* GRID OF CARDS */
+    /* GRID OF CARDS (for sidebar content, unchanged) */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -159,7 +221,7 @@
   <!-- TOP NAVIGATION -->
   <header class="top-nav">
     <div class="nav-links">
-      <a href="/" class="nav-btn">← Leave Hub</a> <!-- ✅ Only "Leave Hub" button remains -->
+      <a href="/" class="nav-btn">← Leave Hub</a>
     </div>
     <div class="actions">
       <a href="notes" class="demo-btn">+ New Note</a>
@@ -189,7 +251,7 @@
       </ul>
     </aside>
 
-    <!-- MAIN GRID CONTENT -->
+    <!-- MAIN GRID CONTENT (Sidebar Cards) -->
     <main class="main-content grid-background">
       <div class="grid">
         <!-- Example coworker cards -->
@@ -221,6 +283,7 @@
   </div>
 
   <script>
+    // Chatbox script
     const chatLog = document.getElementById('chat-log');
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
