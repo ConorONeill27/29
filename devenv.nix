@@ -32,9 +32,9 @@
     enable = true;
     initialDatabases = [
       {
-        name = "vocanote";
-        user = "voca";
-        pass = "note";
+        name = "vocanote_development";
+        user = "postgres";
+        pass = "1234";
       }
     ];
     listen_addresses = "127.0.0.1";
