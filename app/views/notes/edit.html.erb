@@ -25,4 +25,15 @@
     <%= marksmith_tag form, :content %>
     <%= form.submit %>
 
+    <div data-controller="markdown">
+  <div data-markdown-target="editor"
+       contenteditable="true"
+       onblur="this.dispatchEvent(new Event('save', {bubbles: true}))"
+       onclick="this.dispatchEvent(new Event('edit', {bubbles: true}))">
+    ## Hello, Markdown!
+  </div>
+  <div data-markdown-target="preview"></div>
+</div>
+
+
 <% end %>

@@ -34,6 +34,11 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+#run bundled js
+gem 'mini_racer'
+
+gem 'markdoc'
+
 # Render markdown
 gem "redcarpet"
 
