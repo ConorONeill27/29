@@ -1,15 +1,223 @@
-<%= form_with(model: @note, local: true) do |form| %>
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Markdown Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Editor.md CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md/css/editormd.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/editor.md/editormd.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0c0f17;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 1.5rem 0;
+      background-color: #14161c;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Toolbar - now below header ✅ */
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      background-color: #1a1f2a;
+      gap: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    .toolbar input[type="text"] {
+      padding: 0.6rem;
+      width: 300px;
+      border-radius: 6px;
+      border: none;
+      background-color: #1f2833;
+      color: #fff;
+    }
+    .toolbar button {
+      padding: 0.7rem 1.4rem;
+      background-color: #5865f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .toolbar button:hover { background-color: #4752d0; }
+
+    /* Editor Container */
+    #markdown-editor {
+      width: 100%;
+      height: 55vh;
+      background-color: #1a1f2a;
+    }
+    .editormd {
+      background-color: #1a1f2a !important;
+      color: #fff !important;
+    }
+
+    /* Saved Notes Section */
+    .saved-notes {
+      padding: 1rem 2rem;
+      background-color: #14161c;
+      height: 40vh;
+      overflow-y: auto;
+      border-top: 1px solid #1f2833;
+    }
+    .saved-notes h3 {
+      color: #fff;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .note-item {
+      background-color: #1f2833;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .note-item span { color: #fff; font-weight: 500; }
+    .note-item button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #4752d0;
+      color: #fff;
+      cursor: pointer;
+    }
+    .note-item button:hover { background-color: #5865f2; }
+
+    @media (max-width: 768px) {
+      .toolbar { flex-direction: column; align-items: flex-start; }
+      .toolbar input, .toolbar button { width: 100%; margin-bottom: 0.5rem; }
+      #markdown-editor { height: 45vh; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <div class="header">
+    📝 Markdown Editor
   </div>
 
-  <div>
-    <%= form.label :body %>
-    <%= form.text_area :body %>
+  <!-- Toolbar Section (Now properly below header) -->
+  <div class="toolbar">
+    <input id="note-title" type="text" placeholder="Note title...">
+    <button onclick="saveMarkdown()">💾 Save Note</button>
+    <button onclick="clearEditor()">🧹 Clear</button>
+    <a href='/my_hub'>← Back to Hub</button>
   </div>
 
-  <div>
-    <%= form.submit "Create Note" %>
+  <!-- Markdown Editor -->
+  <div id="markdown-editor">
+    <textarea style="display:none;">### Welcome to Your Markdown Editor  
+Start writing your notes here...</textarea>
   </div>
-<% end %>
+
+  <!-- Saved Notes Section -->
+  <div id="saved-notes">
+    <h3>🗂️ Saved Notes</h3>
+    <div id="notes-list">
+      <% @notes.each do |notes| %>
+        <div>
+          <span><%= note.title %></span>
+          <div>
+            <%= link_to "📂 Open", show_note_path %>
+            <%= link_to "⬇️ Download", download_note_path %>
+            <%= link_to "❌ Delete", destroy_note_path %>
+          </div>`;
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    var editor;
+
+    $(function() {
+      editor = editormd("markdown-editor", {
+        width: "100%",
+        height: "100%",
+        path: "https://cdn.jsdelivr.net/npm/editor.md/lib/",
+        saveHTMLToTextarea: true,
+        emoji: true,
+        taskList: true,
+        tex: true,
+        flowChart: true,
+        sequenceDiagram: true,
+        theme: "dark",
+        previewTheme: "dark",
+        editorTheme: "pastel-on-dark"
+      });
+
+      loadNotes(); // Load saved notes from localStorage
+    });
+
+    function saveMarkdown() {
+      const title = document.getElementById('note-title').value.trim() || "Untitled Note";
+      const markdown = editor.getMarkdown();
+      if (!markdown.trim()) {
+        alert('🚨 Cannot save an empty note!');
+        return;
+      }
+
+      fetch("/notes", {
+        method: 'POST',
+        body: `title=${title}&body=${markdown}`,
+        headers: {
+          "X-CSRF-Token": csrfToken,
+        }
+      }).then(res => res.status === 200 && alert('✅ Note saved successfully!'));
+    }
+
+
+    function downloadNote(index) {
+      const notes = JSON.parse(localStorage.getItem('notes')) || [];
+      const note = notes[index];
+      const blob = new Blob([note.content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${note.title}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function clearEditor() {
+      if (confirm("Are you sure you want to clear the editor?")) {
+        editor.clear();
+        document.getElementById('note-title').value = '';
+      }
+    }
+  </script>
+</body>
+</html>
