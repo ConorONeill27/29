@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_234045) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_23_091008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,11 +50,36 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_234045) do
     t.text "bullet_points"
   end
 
+  create_table "notebook_memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "notebook_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notebook_id"], name: "index_notebook_memberships_on_notebook_id"
+    t.index ["user_id"], name: "index_notebook_memberships_on_user_id"
+  end
+
+  create_table "notebooks", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notes", force: :cascade do |t|
     t.string "title"
     t.string "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "organization_memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_memberships_on_organization_id"
+    t.index ["user_id", "organization_id"], name: "index_organization_memberships_on_user_id_and_organization_id", unique: true
+    t.index ["user_id"], name: "index_organization_memberships_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -93,5 +118,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_234045) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "notebook_memberships", "notebooks"
+  add_foreign_key "notebook_memberships", "users"
+  add_foreign_key "organization_memberships", "organizations"
+  add_foreign_key "organization_memberships", "users"
   add_foreign_key "sessions", "users"
 end

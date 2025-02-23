@@ -30,5 +30,14 @@ Rails.application.routes.draw do
   resources :profiles
   resources :recordings
 
+  resources :notebooks do
+    resources :notes, only: [:create, :update, :destroy, :show, :index]
+    member do
+      post 'add_member'  # Add a user to a shared notebook
+      delete 'remove_member/:user_id', to: 'notebooks#remove_member', as: 'remove_member'
+    end
+  end
+  
+
   match "*path", to: "application#not_found", via: :all
 end
