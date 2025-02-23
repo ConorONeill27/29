@@ -1,0 +1,9 @@
+<% if @are_intersecting_orgs %>
+  <p><%= @user.email_address %></p>
+  <% @intersecting_orgs.each do |org| %>
+    <%= link_to org.name, org %>
+  <% end %>
+<% else %>
+  <p>You do not share any organizations with this user.</p>
+<% end %>
+

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Proper Noun Classifier & Spread Out Network</title>
+  <!-- vis-network for visualization -->
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <!-- Compromise for proper noun extraction -->
+  <script src="https://unpkg.com/compromise"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 20px;
+      color: #343a40;
+    }
+    h1 { margin-bottom: 0.5em; }
+    #controls {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #ffffff;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+    label { font-weight: bold; }
+    table {
+      border-collapse: collapse;
+      margin-top: 20px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #ced4da;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 8px;
+      text-align: left;
+    }
+    #network {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ced4da;
+      margin-top: 20px;
+      background: #ffffff;
+    }
+    .legend {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Classifier & Spread Out Network</h1>
+  <p><em>Note:</em> Hello!</p>
+  <div id="controls">
+    <label for="fileInput">Select .md files:</label>
+    <input type="file" id="fileInput" accept=".md" multiple>
+  </div>
+  <div id="tableContainer"></div>
+  <button id="fullscreenButton">Toggle Fullscreen</button>
+  <div id="network"></div>
+  <div id="legend" class="legend"></div>
+
+  <script>
+    const candidateLabels = ["Technology", "Business", "Health", "Science", "Education", "Sports", "Politics", "Entertainment"];
+
+    const baseFontSize = 24;
+    const maxFontSize = 48;
+
+    document.getElementById('fullscreenButton').addEventListener('click', () => {
+        const networkContainer = document.getElementById('network');
+        if (!document.fullscreenElement) {
+            // Request full screen on the network container
+            if (networkContainer.requestFullscreen) {
+            networkContainer.requestFullscreen();
+            } else if (networkContainer.mozRequestFullScreen) { /* Firefox */
+            networkContainer.mozRequestFullScreen();
+            } else if (networkContainer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            networkContainer.webkitRequestFullscreen();
+            } else if (networkContainer.msRequestFullscreen) { /* IE/Edge */
+            networkContainer.msRequestFullscreen();
+            }
+        } else {
+            // Exit full screen
+            if (document.exitFullscreen) {
+            document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+            document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+            document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+            document.msExitFullscreen();
+            }
+        }
+        });
+
+    // Use Compromise to extract proper nouns.
+    // Returns an array of objects: { keyword, count }
+    function extractProperNouns(text, topN = 5) {
+    const doc = nlp(text);
+    // Extract full names using the people() method.
+    let personNames = doc.people().out('array');
+
+    // Also extract remaining proper nouns (if needed) but filter out parts of the full names.
+    let properNouns = doc.match('#ProperNoun').out('array');
+    properNouns = properNouns.filter(noun => {
+        // Skip noun if it's part of any full person name
+        return !personNames.some(fullName => fullName.includes(noun));
+    });
+
+    // Combine the full person names and any leftover proper nouns.
+    let combined = personNames.concat(properNouns);
+
+    // Count frequencies.
+    const counts = {};
+    combined.forEach(word => {
+        word = word.trim();
+        if (word.length > 2) {
+        counts[word] = (counts[word] || 0) + 1;
+        }
+    });
+
+    // Sort and slice to get the top N keywords.
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    let keywords = entries.slice(0, topN).map(entry => ({ keyword: entry[0], count: entry[1] }));
+
+    if (keywords.length === 0) { 
+        keywords = [{ keyword: "Uncategorized", count: 1 }]; 
+    }
+    return keywords;
+    }
+
+    // Classify document text using Hugging Face’s zero-shot classification API.
+    async function classifyText(text) {
+      const apiUrl = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli";
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            inputs: text,
+            parameters: { candidate_labels: candidateLabels }
+          })
+        });
+        if (!response.ok) {
+          console.error("API response error:", response.statusText);
+          return "";
+        }
+        const result = await response.json();
+        if (result && result.labels && result.labels.length > 0) {
+          return result.labels[0];
+        }
+      } catch (err) {
+        console.error("Classification error:", err);
+      }
+      return "";
+    }
+
+    // Process selected files.
+    document.getElementById('fileInput').addEventListener('change', event => {
+      const files = event.target.files;
+      const docs = [];
+      const promises = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const promise = new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const content = e.target.result;
+            const keywords = extractProperNouns(content);
+            const classification = await classifyText(content);
+            resolve({ name: file.name, keywords, classification });
+          };
+          reader.onerror = reject;
+          reader.readAsText(file);
+        });
+        promises.push(promise);
+      }
+      Promise.all(promises).then(results => {
+        // Global frequency: count how many documents mention each keyword.
+        const globalFreq = {};
+        results.forEach(doc => {
+          doc.keywords.forEach(obj => {
+            const kw = obj.keyword;
+            globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+          });
+        });
+        results.forEach(doc => {
+          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+        });
+        updateTable(results);
+        buildNetwork(results, globalFreq);
+      });
+    });
+
+    // Update the HTML table with document details.
+    function updateTable(docs) {
+      let html = '<table><thead><tr><th>File Name</th><th>Proper Noun Keywords</th><th>Tags</th><th>Classification</th></tr></thead><tbody>';
+      docs.forEach(doc => {
+        const keywordText = doc.keywords.map(obj => obj.keyword).join(', ');
+        html += `<tr>
+                   <td>${doc.name}</td>
+                   <td>${keywordText}</td>
+                   <td>${doc.tags.join(', ') || 'None'}</td>
+                   <td>${doc.classification}</td>
+                 </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = html;
+    }
+
+    // Fade in a node by gradually increasing its opacity.
+    function fadeIn(nodeId, nodes) {
+      let opacity = 0, step = 0.1;
+      const interval = setInterval(() => {
+        opacity += step;
+        if (opacity >= 1) { opacity = 1; clearInterval(interval); }
+        nodes.update({ id: nodeId, opacity: opacity });
+      }, 50);
+    }
+
+    // Build the network graph using vis-network.
+    // Edges are weighted based on the frequency of the keyword in the document.
+    function buildNetwork(docs, globalFreq) {
+      const nodes = new vis.DataSet([]);
+      const edges = new vis.DataSet([]);
+      const keywordNodes = {};
+      const classificationNodes = {};
+
+      let docId = 1, kwId = 1001, clsId = 2001;
+
+      // Add document nodes with increased box sizes and constraints.
+      docs.forEach(doc => {
+        const currentDocId = docId++;
+        nodes.add({ 
+          id: currentDocId, 
+          label: doc.name, 
+          fullLabel: doc.name, 
+          shape: 'box', 
+          color: { background: '#AED6F1', border: '#5DADE2' },
+          font: { size: baseFontSize },
+          type: 'document',
+          opacity: 1,
+          widthConstraint: { minimum: 0, maximum: 400 },
+          heightConstraint: { minimum: 0, maximum: 120 },
+          shadow: { enabled: true, color: 'rgba(0,0,0,0.2)', size: 5, x: 3, y: 3 }
+        });
+        // Add keyword nodes with constraints.
+        doc.keywords.forEach(obj => {
+        const kw = obj.keyword;
+        const count = obj.count;
+        if (!(kw in keywordNodes)) {
+            const isTag = globalFreq[kw] > 1;
+            keywordNodes[kw] = kwId;
+            nodes.add({
+            id: kwId,
+            label: kw,
+            fullLabel: kw,
+            shape: 'ellipse',
+            color: isTag 
+                    ? { background: '#F1948A', border: '#E74C3C' }
+                    : { background: '#F9E79F', border: '#F7DC6F' },
+            font: { size: baseFontSize },
+            type: 'keyword',
+            opacity: 1,
+            widthConstraint: { minimum: 0, maximum: 150 },
+            heightConstraint: { minimum: 0, maximum: 10 }
+            });
+            kwId++;
+        }
+        // Apply logarithmic scaling to the edge width.
+        edges.add({ 
+            from: currentDocId, 
+            to: keywordNodes[kw],
+            width: 1 + Math.log(count + 1)
+        });
+        });
+        
+        // Add classification node with constraints.
+        let cls = doc.classification || "";
+        if (!(cls in classificationNodes)) {
+          classificationNodes[cls] = clsId;
+          nodes.add({
+            id: clsId,
+            label: cls,
+            fullLabel: cls,
+            shape: 'diamond',
+            color: { background: '#C39BD3', border: '#AF7AC5' },
+            font: { size: baseFontSize },
+            type: 'classification',
+            opacity: 1,
+            widthConstraint: { minimum: 120 },
+            heightConstraint: { minimum: 40 }
+          });
+          clsId++;
+        }
+        edges.add({ from: currentDocId, to: classificationNodes[cls], width: 1 });
+      });
+
+      const container = document.getElementById('network');
+      const data = { nodes: nodes, edges: edges };
+
+      // Adjust physics settings using forceAtlas2Based with further spread parameters.
+      const options = {
+        layout: { improvedLayout: true },
+        physics: {
+          forceAtlas2Based: {
+            gravitationalConstant: -2000, // More repulsion.
+            centralGravity: 0,         // Slightly less gravity pulling nodes together.
+            springLength: 3000,            // Increase spring length.
+            springConstant: 0.05,         // Slightly lower spring constant.
+            avoidOverlap: 2               // Continue to try to avoid overlap.
+          },
+          maxVelocity: 50,
+          timestep: 0.35,
+          stabilization: { iterations: 500 }
+        },
+        interaction: { hover: true }
+      };
+
+      const network = new vis.Network(container, data, options);
+
+      // Throttle updates using requestAnimationFrame.
+      let scheduledUpdate = false;
+      let pendingScale = network.getScale();
+      function scheduleUpdate(scale) {
+        pendingScale = scale;
+        if (!scheduledUpdate) {
+          scheduledUpdate = true;
+          requestAnimationFrame(() => {
+            updateNodeDisplay(pendingScale);
+            scheduledUpdate = false;
+          });
+        }
+      }
+
+      // Update node appearance based on zoom scale.
+      function updateNodeDisplay(scale) {
+        let effectiveFontSize = Math.min(baseFontSize / scale, maxFontSize);
+        const allNodes = nodes.get();
+        allNodes.forEach(function(node) {
+          let update = { id: node.id, font: { size: effectiveFontSize } };
+          if (node.type === 'keyword' && scale < 0.8) { update.hidden = true; }
+          else { update.hidden = false; }
+          if (node.type === 'document' && scale < 0.6) { update.label = ""; }
+          else { update.label = node.fullLabel; }
+          nodes.update(update);
+          if (!update.hidden) {
+            let currentOpacity = nodes.get(node.id).opacity;
+            if (!currentOpacity || currentOpacity < 1) {
+              nodes.update({ id: node.id, opacity: 0 });
+              fadeIn(node.id, nodes);
+            }
+          }
+        });
+      }
+
+      updateNodeDisplay(network.getScale());
+      network.on('zoom', params => { scheduleUpdate(params.scale); });
+      network.on('dragEnd', () => { scheduleUpdate(network.getScale()); });
+      
+      network.once('stabilizationIterationsDone', () => {
+        const totalNodes = nodes.length;
+        const legendDiv = document.getElementById('legend');
+        legendDiv.innerHTML = totalNodes > 50 
+          ? "Large graph (" + totalNodes + " nodes). Zoom and pan to explore details." 
+          : "";
+      });
+    }
+  </script>
+</body>
+</html>

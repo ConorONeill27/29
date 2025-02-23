@@ -1,0 +1,9 @@
+<h1><%= @user.email_address %></h1>
+
+<h1>Connections: </h1>
+<% @related_users.each do |user| %>
+  <h3><%= link_to user.email_address, user %></h3>
+  <% (user.organizations & @user.organizations).each do |overlapping_organization| %>
+    <h4><%= link_to overlapping_organization.name, overlapping_organization %></h4>
+  <% end %>
+<% end %>
