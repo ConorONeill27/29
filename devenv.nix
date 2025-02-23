@@ -1,7 +1,10 @@
-{ pkgs, ... }: {
+{
+  pkgs,
+  nixpkgs-ruby,
+  ...
+}: {
   packages = with pkgs; [
     git
-    ruby_3_3
     pkg-config
     libyaml.dev
     openssl.dev
@@ -10,6 +13,8 @@
     libxml2.dev
     libxslt.dev
     libxcrypt
+    openai-whisper-cpp
+    ffmpeg
   ];
 
   enterShell = ''
@@ -20,7 +25,7 @@
 
   languages.ruby = {
     enable = true;
-    package = pkgs.ruby_3_3;
+    package = nixpkgs-ruby.packages.${pkgs.system}."ruby-3.4.2";
   };
 
   services.postgres = {
@@ -35,5 +40,5 @@
     listen_addresses = "127.0.0.1";
   };
 
-  processes.rails.exec = "rails server";
+  processes.rails.exec = "bin/rails server";
 }
