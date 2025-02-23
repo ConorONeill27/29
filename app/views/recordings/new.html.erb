@@ -120,18 +120,31 @@
         audioChunks.push(event.data);
       });
 
-      mediaRecorder.addEventListener("stop", () => {
+      mediaRecorder.addEventListener("stop", async () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
         const formData = new FormData();
         formData.append('recording[audio]', audioBlob, 'recording.webm');
 
-        fetch("/recordings", {
+        let upload = await fetch("/recordings", {
           method: 'POST',
           body: formData,
           headers: {
             "X-CSRF-Token": csrfToken,
           }
         });
+
+        let upload_data = upload.json();
+
+        let res = await fetch(`/recordings/${id}`, {
+          headers: {
+            "X-CSRF-Token": csrfToken,
+          }
+        });
+
+        let data = res.json().transcription;
+
+
+
       });
 
       document.getElementById('stopBtn').disabled = false;
