@@ -1,81 +1,111 @@
-<div class="form-container">
-  <%= form_with(model: @organization, local: true, class: "styled-form") do |form| %>
-    <h2 class="form-title">Create a New Organization</h2>
-    <div class="form-group">
-      <%= form.label :name, class: "form-label" %>
-      <%= form.text_field :name, class: "form-input", placeholder: "Enter organization name" %>
-    </div>
+<div class="centered-container">
+  <div class="form-container">
+    <h2 class="form-title">🏢 Create a New Organization</h2>
 
-    <div class="form-group">
-      <%= form.submit "Create Organization", class: "submit-btn" %>
-    </div>
-  <% end %>
+    <%= form_with(model: @organization, local: true, class: "styled-form") do |form| %>
+      <div class="form-group">
+        <%= form.label :name, class: "form-label" %>
+        <%= form.text_field :name, class: "form-input", placeholder: "Enter organization name" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.submit "Create Organization", class: "submit-btn" %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <style>
-/* Centering the form */
-.form-container {
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Centered Full-Screen Container */
+.centered-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   height: 100vh; /* Full viewport height */
-  text-align: center;
+  background-color: #0c0f17;
   padding: 20px;
 }
 
-/* Styling the form */
-.styled-form {
-  background: white;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Card-style Form Container */
+.form-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  background: #1a1f2a;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Form Title */
+.form-title {
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* Form Styling */
+.styled-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 15px;
 }
 
-.form-title {
-  color: black;
-}
-
-/* Form fields */
+/* Form Groups */
 .form-group {
-  margin-bottom: 15px;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
+/* Labels */
 .form-label {
   font-weight: bold;
-  display: block;
+  color: #ffffff;
   margin-bottom: 5px;
-  text-align: left;
 }
 
+/* Input Fields */
 .form-input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px;
+  border: 1px solid #333a48;
+  border-radius: 8px;
   font-size: 16px;
+  background-color: #1f2833;
+  color: #ffffff;
 }
 
-/* Submit button */
+/* Submit Button */
 .submit-btn {
   width: 100%;
-  padding: 10px 15px;
-  background-color: #007bff;
+  padding: 12px;
+  background-color: #5865f2;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #4752d0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .form-container {
+    width: 90%;
+  }
 }
 </style>
