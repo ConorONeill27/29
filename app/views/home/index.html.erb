@@ -78,19 +78,24 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: fadeInTitle 2s ease-in-out;
-      text-align: center; /* ✅ Ensures the title is centered */
+      text-align: center;
+    }
+    /* New floating animation wrapper for the title */
+    .floating-title {
+      display: inline-block;
+      animation: floatTitle 6s ease-in-out infinite;
     }
     #homepage-hero p {
       max-width: 600px;
       margin-bottom: 2rem;
       color: #ccc;
       font-size: 1.2rem;
-      text-align: center; /* ✅ Centers the description */
+      text-align: center;
     }
     .hero-buttons {
       display: flex;
       gap: 1rem;
-      justify-content: center; /* ✅ Centers the buttons */
+      justify-content: center;
     }
     .btn {
       background-color: #fff;
@@ -102,10 +107,16 @@
     }
     .btn:hover { background-color: #ccc; }
 
-    /* Animation for Title */
+    /* Animation for Fade In Title */
     @keyframes fadeInTitle {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    /* New Animation for Floating the Title */
+    @keyframes floatTitle {
+      0% { transform: translateY(-5px); }
+      50% { transform: translateY(5px); }
+      100% { transform: translateY(-5px); }
     }
 
     /* Responsive Adjustments */
@@ -118,20 +129,20 @@
 
 <body>
 
-  <!-- HERO SECTION WITH CENTERED TITLE -->
-  
+  <!-- HERO SECTION WITH CENTERED FLOATING TITLE -->
   <section id="homepage-hero">
-  <div style="text-align: center;">
-  <%= image_tag "cartoon_notebook.png", alt: "Description of the image" , class: "img-responsive", width: "300"%>
-  </div>
-    <h1>Bundles!</h1>
-    <p>Take notes collaboratively (or alone!) and chat about what&rsquo;s inside with Bundles, <b>the notebook that talks back.</b></p>
-    <!--
-    <div class="hero-buttons">
-       <a href="#explore" class="btn">Explore Research Tools</a>
-      <a href="#schedule" class="btn">Get Started Now</a>
-      -->
+    <div style="text-align: center;">
+      <%= image_tag "cartoon_notebook.png", alt: "Description of the image", class: "img-responsive", width: "300" %>
     </div>
+    <div class="floating-title">
+      <h1>Bundles!</h1>
+    </div>
+    <p>Take notes collaboratively (or alone!) and chat about what’s inside with Bundles, <b>the notebook that talks back.</b></p>
+    <!-- Hero buttons can remain here if needed -->
+    <!-- <div class="hero-buttons">
+         <a href="#explore" class="btn">Explore Research Tools</a>
+         <a href="#schedule" class="btn">Get Started Now</a>
+       </div> -->
   </section>
 
   <!-- DYNAMIC CONTENT -->
