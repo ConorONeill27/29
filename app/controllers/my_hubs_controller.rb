@@ -16,7 +16,7 @@ class MyHubsController < ApplicationController
 
   # Minimal implementation to generate graph data from files.
   def load_graph_data_from_folder
-    folder = "C:/Users/Tomas/Documents/Employee Notes/*.md"
+    folder = "C:/Users/Tomas/Documents/Employee_Notes/*.md"
     Dir.glob(folder).map do |file|
       content = File.read(file)
       # Replace these calls with your actual implementations if available.

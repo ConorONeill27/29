@@ -391,11 +391,12 @@
     });
   </script>
 
-  <!-- GRAPH SCRIPT -->
-  <script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
     const baseFontSize = 24;
     const maxFontSize = 48;
 
+    // Fullscreen button functionality
     document.getElementById('fullscreenButton').addEventListener('click', () => {
       const networkContainer = document.getElementById('network');
       if (!document.fullscreenElement) {
@@ -421,7 +422,7 @@
       }
     });
 
-    // Automatically load graph data from your server endpoint
+    // Automatically load graph data from the server endpoint
     async function loadGraphData() {
       try {
         const response = await fetch('<%= my_hub_graph_data_path %>');
@@ -445,6 +446,22 @@
       } catch (error) {
         console.error("Error loading graph data:", error);
       }
+    }
+
+    // Update the HTML table with document details.
+    function updateTable(docs) {
+      let html = '<table><thead><tr><th>File Name</th><th>Proper Noun Keywords</th><th>Tags</th><th>Classification</th></tr></thead><tbody>';
+      docs.forEach(doc => {
+        const keywordText = doc.keywords.map(obj => obj.keyword).join(', ');
+        html += `<tr>
+                   <td>${doc.name}</td>
+                   <td>${keywordText}</td>
+                   <td>${doc.tags.join(', ') || 'None'}</td>
+                   <td>${doc.classification}</td>
+                 </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = html;
     }
 
     function fadeIn(nodeId, nodes) {
@@ -547,11 +564,11 @@
       let scheduledUpdate = false;
       let pendingScale = network.getScale();
       function scheduleUpdate(scale) {
-        pendingUpdate = scale;
+        pendingScale = scale;
         if (!scheduledUpdate) {
           scheduledUpdate = true;
           requestAnimationFrame(() => {
-            updateNodeDisplay(scale);
+            updateNodeDisplay(pendingScale);
             scheduledUpdate = false;
           });
         }
@@ -587,28 +604,32 @@
       });
     }
 
-  async function loadGraphData() {
-  try {
-    const response = await fetch('<%= my_hub_graph_data_path %>');
-    if (!response.ok) {
-      console.error("Failed to load graph data:", response.statusText);
-      return;
+    // Automatically load graph data from the server endpoint
+    loadGraphData();
+    async function loadGraphData() {
+      try {
+        const response = await fetch('<%= my_hub_graph_data_path %>');
+        if (!response.ok) {
+          console.error("Failed to load graph data:", response.statusText);
+          return;
+        }
+        const results = await response.json();
+        const globalFreq = {};
+        results.forEach(doc => {
+          doc.keywords.forEach(obj => {
+            const kw = obj.keyword;
+            globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+          });
+        });
+        results.forEach(doc => {
+          doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+        });
+        updateTable(results);
+        buildNetwork(results, globalFreq);
+      } catch (error) {
+        console.error("Error loading graph data:", error);
+      }
     }
-    const results = await response.json();
-    console.log("Graph data loaded:", results); // Add this log
-    const globalFreq = {};
-    results.forEach(doc => {
-      doc.keywords.forEach(obj => {
-        const kw = obj.keyword;
-        globalFreq[kw] = (globalFreq[kw] || 0) + 1;
-      });
-    });
-    results.forEach(doc => {
-      doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
-    });
-    updateTable(results);
-    buildNetwork(results, globalFreq);
-  } catch (error) {
-    console.error("Error loading graph data:", error);
-  }
-}
+  });
+</script>
+
