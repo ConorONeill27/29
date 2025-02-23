@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
+  <!-- vis-network & Compromise for visualization -->
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <script src="https://unpkg.com/compromise"></script>
+
   <style>
     /* GLOBAL STYLES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -61,10 +65,8 @@
     .content {
       display: flex;
       flex: 1;
-      padding-top: 60px; /* Adjust for fixed nav height */
+      padding-top: 60px; /* space for fixed nav */
       height: calc(100vh - 60px);
-      justify-content: center;
-      align-items: center;
     }
 
     /* SIDEBAR */
@@ -81,7 +83,7 @@
     .sidebar a { text-decoration: none; color: #aaa; transition: color 0.2s ease; }
     .sidebar a:hover { color: #fff; }
 
-    /* MAIN CONTENT AREA */
+    /* MAIN CONTENT AREA (Grid Cards) */
     .main-content {
       flex: 1;
       padding: 1rem 2rem;
@@ -92,8 +94,6 @@
       align-items: center;
       justify-content: center;
     }
-
-    /* CENTERED GRAPH SECTION (with dot grid background) */
     .grid-background::before {
       content: "";
       position: absolute;
@@ -105,60 +105,6 @@
       opacity: 0.2;
       z-index: -1;
     }
-    #graph-section {
-      width: 85%;
-      height: 80vh;
-      background: #1a1f2a;
-      border: 1px solid #34495e;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    #controls {
-      margin-bottom: 20px;
-      padding: 10px;
-      background: #14161c;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
-      text-align: center;
-      color: #fff;
-    }
-    #controls input {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #5865f2;
-      background: #14161c;
-      color: #fff;
-      width: 100%;
-    }
-    #fullscreenButton {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border-radius: 6px;
-      background-color: #5865f2;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #fullscreenButton:hover { background-color: #4752d0; }
-    #network {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      background: #20252f;
-      border: 2px solid #5865f2;
-    }
-    #legend {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #6c757d;
-    }
-
-    /* GRID OF CARDS (for sidebar content, unchanged) */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -179,15 +125,109 @@
     .card-title { font-weight: 600; margin-bottom: 0.5rem; }
     .card-desc { font-size: 0.9rem; color: #ccc; }
 
+    /* CENTERED GRAPH SECTION */
+    .graph-section-wrapper {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    #graph-section {
+      width: 85%;
+      height: 80vh;
+      background: #1a1f2a;
+      border: 1px solid #34495e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    #graph-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(#ccc 1px, transparent 1px), radial-gradient(#ccc 1px, transparent 1px);
+      background-position: 0 0, 10px 10px;
+      background-size: 20px 20px;
+      opacity: 0.2;
+      z-index: -1;
+    }
+    .card-avatar {
+  width: 70px;       /* Adjust size as needed */
+  height: 70px;      /* Adjust size as needed */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover;  /* Ensures the image fills the container */
+  margin-bottom: 10px;
+}
+
+    #network {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      background: #20252f;
+      border: 2px solid #5865f2;
+      margin-top: 20px;
+    }
+    #fullscreenButton {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      background-color: #5865f2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #fullscreenButton:hover { background-color: #4752d0; }
+    #legend {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #6c757d;
+    }
+
     /* CHATBOX */
     #chat-container {
-      position: fixed; bottom: 20px; right: 20px;
-      width: 350px; background: #1a1f2a; border-radius: 10px;
-      padding: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); z-index: 200;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      background: #1a1f2a;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 200;
     }
-    #chat-log { height: 250px; overflow-y: auto; padding: 10px; background-color: #20252f; border-radius: 5px; margin-bottom: 10px; color: #fff; }
-    #user-input { width: 70%; padding: 10px; border-radius: 5px; background-color: #2a2f3a; border: none; color: white; }
-    #send-button { width: 25%; padding: 10px; border-radius: 5px; border: none; background-color: #5865f2; color: white; cursor: pointer; }
+    #chat-log { 
+      height: 250px; 
+      overflow-y: auto; 
+      padding: 10px; 
+      background-color: #20252f; 
+      border-radius: 5px; 
+      margin-bottom: 10px; 
+      color: #fff; 
+    }
+    #user-input { 
+      width: 70%; 
+      padding: 10px; 
+      border-radius: 5px; 
+      background-color: #2a2f3a; 
+      border: none; 
+      color: white; 
+    }
+    #send-button { 
+      width: 25%; 
+      padding: 10px; 
+      border-radius: 5px; 
+      border: none; 
+      background-color: #5865f2; 
+      color: white; 
+      cursor: pointer; 
+    }
     #send-button:hover { background-color: #4752c4; }
   </style>
 </head>
@@ -198,7 +238,7 @@
       <a href="/" class="nav-btn">← Leave Hub</a>
     </div>
     <div class="actions">
-      <a href="notes" class="demo-btn">+ New Note</a>
+      <a href="notes" class="nav-btn">+ New Note</a>
     </div>
   </header>
 
@@ -225,42 +265,78 @@
       </ul>
     </aside>
 
-    <!-- MAIN GRID CONTENT (Sidebar Cards) -->
-    <main class="main-content grid-background">
-      <div class="grid">
-        <!-- Example coworker cards -->
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Alice Brown</div>
-          <div class="card-desc">Lead Engineer in AI and ML solutions.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👨</div>
-          <div class="card-title">Bob Johnson</div>
-          <div class="card-desc">Product Manager focusing on design.</div>
-        </a>
-        <a href="#" class="card">
-          <div class="card-icon">👩</div>
-          <div class="card-title">Catherine Li</div>
-          <div class="card-desc">Marketing Specialist with global impact.</div>
-        </a>
-      </div>
-    </main>
+ <!-- MAIN GRID CONTENT (Sidebar Cards) -->
+<main class="main-content grid-background">
+  <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+    <!-- Example card for Alice Brown -->
+    
+    <a href="/employee_notes/1" class="card">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/1*HNDhCUJGGFUMdhSeKteWJA.png" alt="Alice Brown Avatar" class="card-avatar">
+      <div class="card-title">Alice Brown</div>
+      <div class="card-desc">HR Specialist</div>
+    </a>
+    <!-- Example card for Bob Johnson -->
+    <a href="/employee_notes/2" class="card">
+      <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/b2e29994-2acc-464b-b2d0-20036b4f41cb/cd880067-5ea7-4de1-8be6-46575d608796.png" alt="Bob Johnson Avatar" class="card-avatar">
+      <div class="card-title">Bob Johnson</div>
+      <div class="card-desc">Finance Expert</div>
+    </a>
+    <!-- Example card for Catherine Li -->
+    <a href="/employee_notes/3" class="card">
+      <img src="https://images.tech.co/wp-content/uploads/2024/04/17123134/AdobeStock_657290983-1-min.jpeg" alt="Catherine Li Avatar" class="card-avatar">
+      <div class="card-title">Catherine Li</div>
+      <div class="card-desc">Marketing Specialist</div>
+    </a>
+    <!-- Additional 7 cards -->
+    <a href="/employee_notes/4" class="card">
+      <img src="https://cdn.prod.website-files.com/5fd2ba952bcd68835f2c8254/6789575e8faf4908de0d32f4_20916742-0.webp" alt="David Smith Avatar" class="card-avatar">
+      <div class="card-title">David Smith</div>
+      <div class="card-desc">Product Manager</div>
+    </a>
+    <a href="/employee_notes/5" class="card">
+      <img src="https://cdn.prod.website-files.com/5fd2ba952bcd68835f2c8254/65a5cf3ebf8d7e43e8c77962_ai-generated-headshot-example.webp" alt="Emma Davis Avatar" class="card-avatar">
+      <div class="card-title">Emma Davis</div>
+      <div class="card-desc">UX Designer</div>
+    </a>
+    <a href="/employee_notes/6" class="card">
+      <img src="https://www.denverheadshotco.com/wp-content/uploads/2023/06/dhc-coporate-headshots-hero-1.jpg" alt="Frank Miller Avatar" class="card-avatar">
+      <div class="card-title">Frank Miller</div>
+      <div class="card-desc">Software Developer</div>
+    </a>
+    <a href="/employee_notes/7" class="card">
+      <img src="https://www.briefcasecoach.com/wp-content/uploads/2024/09/Screen-Shot-2024-09-04-at-3.08.38-PM-1-1024x905.png" alt="Grace Lee Avatar" class="card-avatar">
+      <div class="card-title">Grace Lee</div>
+      <div class="card-desc">Operations Lead</div>
+    </a>
+    <a href="/employee_notes/8" class="card">
+      <img src="https://image13.photobiz.com/10309/12_20240417102146_12845125_large.jpg" alt="Henry Wilson Avatar" class="card-avatar">
+      <div class="card-title">Henry Wilson</div>
+      <div class="card-desc">Data Scientist</div>
+    </a>
+    <a href="/employee_notes/9" class="card">
+      <img src="https://brightspark-consulting.com/wp-content/uploads/2023/05/Screenshot-2023-05-05-at-11.55.47.png" alt="Isabella Martinez Avatar" class="card-avatar">
+      <div class="card-title">Isabella Martinez</div>
+      <div class="card-desc">Sales Director</div>
+    </a>
+    <a href="/employee_notes/10" class="card">
+      <img src="https://pbs.twimg.com/profile_images/1080456670684332032/7-4OAu7I_400x400.jpg" alt="Jack Thompson Avatar" class="card-avatar">
+      <div class="card-title">Des Traynor</div>
+      <div class="card-desc">Unpaid Intern</div>
+    </a>
   </div>
+</main>
 
-  <!-- GRAPH SECTION (Centered) -->
+
+  <!-- CENTERED GRAPH SECTION -->
   <div class="content">
     <section id="graph-section" class="grid-background">
       <h2 style="color:#fff; text-align: center;">Classifier & Spread Out Network</h2>
       <p style="text-align: center;">Note: Hello!</p>
-      <div id="controls" style="width: 100%; max-width: 600px;">
-        <label for="fileInput">Select .md files:</label>
-        <input type="file" id="fileInput" accept=".md" multiple>
-      </div>
+      <!-- Removed file input: graph data is auto-loaded from the server -->
       <div id="tableContainer" style="width: 100%; max-width: 600px;"></div>
       <button id="fullscreenButton">Toggle Fullscreen</button>
       <div id="network" style="margin-top: 20px;"></div>
-      <div id="legend" class="legend"></div>
+      <div id="legend"></div>
     </section>
   </div>
 
@@ -279,7 +355,6 @@
 
     function appendMessage(sender, text) {
       const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message', sender);
       messageDiv.textContent = `${sender === 'user' ? 'You' : 'Bot'}: ${text}`;
       chatLog.appendChild(messageDiv);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -346,70 +421,15 @@
       }
     });
 
-    function extractProperNouns(text, topN = 5) {
-      const doc = nlp(text);
-      let personNames = doc.people().out('array');
-      let properNouns = doc.match('#ProperNoun').out('array');
-      properNouns = properNouns.filter(noun => !personNames.some(fullName => fullName.includes(noun)));
-      let combined = personNames.concat(properNouns);
-      const counts = {};
-      combined.forEach(word => {
-        word = word.trim();
-        if (word.length > 2) {
-          counts[word] = (counts[word] || 0) + 1;
-        }
-      });
-      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      let keywords = entries.slice(0, topN).map(entry => ({ keyword: entry[0], count: entry[1] }));
-      if (keywords.length === 0) { keywords = [{ keyword: "Uncategorized", count: 1 }]; }
-      return keywords;
-    }
-
-    async function classifyText(text) {
-      const apiUrl = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli";
+    // Automatically load graph data from your server endpoint
+    async function loadGraphData() {
       try {
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            inputs: text,
-            parameters: { candidate_labels: ["Technology", "Business", "Health", "Science", "Education", "Sports", "Politics", "Entertainment"] }
-          })
-        });
+        const response = await fetch('<%= my_hub_graph_data_path %>');
         if (!response.ok) {
-          console.error("API response error:", response.statusText);
-          return "";
+          console.error("Failed to load graph data:", response.statusText);
+          return;
         }
-        const result = await response.json();
-        if (result && result.labels && result.labels.length > 0) {
-          return result.labels[0];
-        }
-      } catch (err) {
-        console.error("Classification error:", err);
-      }
-      return "";
-    }
-
-    document.getElementById('fileInput').addEventListener('change', event => {
-      const files = event.target.files;
-      const docs = [];
-      const promises = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const promise = new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = async function(e) {
-            const content = e.target.result;
-            const keywords = extractProperNouns(content);
-            const classification = await classifyText(content);
-            resolve({ name: file.name, keywords, classification });
-          };
-          reader.onerror = reject;
-          reader.readAsText(file);
-        });
-        promises.push(promise);
-      }
-      Promise.all(promises).then(results => {
+        const results = await response.json();
         const globalFreq = {};
         results.forEach(doc => {
           doc.keywords.forEach(obj => {
@@ -422,22 +442,9 @@
         });
         updateTable(results);
         buildNetwork(results, globalFreq);
-      });
-    });
-
-    function updateTable(docs) {
-      let html = '<table><thead><tr><th>File Name</th><th>Proper Noun Keywords</th><th>Tags</th><th>Classification</th></tr></thead><tbody>';
-      docs.forEach(doc => {
-        const keywordText = doc.keywords.map(obj => obj.keyword).join(', ');
-        html += `<tr>
-                   <td>${doc.name}</td>
-                   <td>${keywordText}</td>
-                   <td>${doc.tags.join(', ') || 'None'}</td>
-                   <td>${doc.classification}</td>
-                 </tr>`;
-      });
-      html += '</tbody></table>';
-      document.getElementById('tableContainer').innerHTML = html;
+      } catch (error) {
+        console.error("Error loading graph data:", error);
+      }
     }
 
     function fadeIn(nodeId, nodes) {
@@ -540,11 +547,11 @@
       let scheduledUpdate = false;
       let pendingScale = network.getScale();
       function scheduleUpdate(scale) {
-        pendingScale = scale;
+        pendingUpdate = scale;
         if (!scheduledUpdate) {
           scheduledUpdate = true;
           requestAnimationFrame(() => {
-            updateNodeDisplay(pendingScale);
+            updateNodeDisplay(scale);
             scheduledUpdate = false;
           });
         }
@@ -579,6 +586,29 @@
           : "";
       });
     }
-  </script>
-</body>
-</html>
+
+  async function loadGraphData() {
+  try {
+    const response = await fetch('<%= my_hub_graph_data_path %>');
+    if (!response.ok) {
+      console.error("Failed to load graph data:", response.statusText);
+      return;
+    }
+    const results = await response.json();
+    console.log("Graph data loaded:", results); // Add this log
+    const globalFreq = {};
+    results.forEach(doc => {
+      doc.keywords.forEach(obj => {
+        const kw = obj.keyword;
+        globalFreq[kw] = (globalFreq[kw] || 0) + 1;
+      });
+    });
+    results.forEach(doc => {
+      doc.tags = doc.keywords.filter(obj => globalFreq[obj.keyword] > 1).map(obj => obj.keyword);
+    });
+    updateTable(results);
+    buildNetwork(results, globalFreq);
+  } catch (error) {
+    console.error("Error loading graph data:", error);
+  }
+}
