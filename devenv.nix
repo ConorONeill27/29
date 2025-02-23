@@ -13,10 +13,12 @@
     libxml2.dev
     libxslt.dev
     libxcrypt
+    openai-whisper-cpp
+    ffmpeg
   ];
 
   enterShell = ''
-    git --version
+    whisper-cpp-download-ggml-model base.en
     ruby --version
     bundle
   '';

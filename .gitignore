@@ -37,3 +37,6 @@
 .devenv
 .direnv
 
+record_out*
+
+ggml-base*
