@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
-  root "home#index"
+  root "about_us#index"
 
   get "up" => "rails/health#show", :as => :rails_health_check
 
@@ -15,6 +15,6 @@ Rails.application.routes.draw do
 
   # Add a route for "My Hub"
   get "/my_hub", to: "my_hubs#index", as: :my_hub
-
+  get "/about_us", to: "about_us#index", as: :about_us
   match "*path", to: "application#not_found", via: :all
 end

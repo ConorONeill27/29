@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Bundles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Using a Google Font (Inter) -->
+  <!-- Using Google Font "Inter" -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
@@ -18,14 +18,20 @@
       padding: 0;
       box-sizing: border-box;
     }
-    body {
+    html, body {
+      height: 100%;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0c0f17, #000);
       color: #fff;
+      position: relative;
+      overflow-x: hidden;
     }
-
     /* NAVIGATION BAR */
     nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -39,6 +45,7 @@
     .logo {
       font-size: 1.25rem;
       font-weight: 700;
+      color: #fff;
       margin-right: 2rem;
     }
     .nav-links a {
@@ -46,6 +53,7 @@
       text-decoration: none;
       color: #ccc;
       font-weight: 500;
+      transition: color 0.2s ease;
     }
     .nav-links a:hover {
       color: #fff;
@@ -62,9 +70,9 @@
     .demo-btn:hover {
       background-color: #5865f2;
     }
-
     /* HERO SECTION */
     .hero {
+      margin-top: 80px; /* account for fixed nav */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -72,6 +80,8 @@
       text-align: center;
       min-height: calc(100vh - 80px);
       padding: 0 1rem;
+      position: relative;
+      z-index: 1;
     }
     .hero h1 {
       font-size: 3rem;
@@ -105,9 +115,33 @@
     <%= javascript_importmap_tags %>
 </head>
 <body>
-  <%= render "layouts/header" %>
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">Bundles</div>
+      <div class="nav-links">
+        <a href="#solutions">Solutions</a>
+        <a href="#industries">Industries</a>
+  <%= link_to "About Us", about_us_path, data: { turbo: false } %>
 
-  <%= yield %>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="demo-btn">My Hub</a>
+    </div>
+  </nav>
 
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Welcome to Bundles</h1>
+    <p>
+      Simplify your workflow and elevate your projects with our innovative tools.
+      Experience dynamic, fluid design that adapts with you.
+    </p>
+    <div class="hero-buttons">
+      <a href="#explore" class="btn">Explore Solutions</a>
+      <a href="#schedule" class="btn">Schedule a Demo</a>
+    </div>
+  </section>
 </body>
 </html>
