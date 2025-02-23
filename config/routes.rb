@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'chat#index'
+  root 'home#index'
   post 'chat/message', to: 'chat#message'
 
   post "chat/clear", to: "chat#clear"
