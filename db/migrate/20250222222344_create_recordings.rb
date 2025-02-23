@@ -1,4 +1,4 @@
-class CreateRecordings < ActiveRecord::Migration[8.0]
+class CreateRecordings < ActiveRecord::Migration[6.0]
   def change
     create_table :recordings do |t|
       t.timestamps
