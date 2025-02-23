@@ -18,9 +18,8 @@ class OrganizationsController < ApplicationController
   def create
     @organization = Organization.new(organization_params)
     @organization.users << @current_user
-    @current_user.organizations << @organization
 
-    if @organization.save && @current_user.save
+    if @organization.save
       redirect_to @organization,
         notice: "Organization was successfully created."
     else
@@ -60,5 +59,4 @@ class OrganizationsController < ApplicationController
   def organization_params
     params.require(:organization).permit(:name, :oid, :uid)
   end
-  
 end

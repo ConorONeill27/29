@@ -19,7 +19,7 @@
                 <%= link_to user.email_address, profile_path(user), class: "organization-link", data: { turbo: false } %>
               </td>
               <td class="actions">
-                <%= button_to "🗑 Remove User", remove_user_organizations_path(oid: @organization.id, uid: user.id), method: :delete, class: "delete-btn", data: { turbo_confirm: "Are you sure?" } %>
+                <%= button_to "🗑 Remove User", "/organisations", method: :delete, class: "delete-btn", data: { turbo_confirm: "Are you sure?" } %>
               </td>
             </tr>
           <% end %>
