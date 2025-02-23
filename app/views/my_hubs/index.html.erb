@@ -345,7 +345,10 @@
     <div id="chat-log"></div>
     <input type="text" id="user-input" placeholder="Ask me something...">
     <button id="send-button">Send</button>
+    <button id="microphone-button-on" style="display: none">🎤</button>
+    <button id="microphone-button-off">🔇</button>
   </div>
+
 
   <script>
     // Chatbox script
@@ -353,17 +356,21 @@
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
 
-    function appendMessage(sender, text) {
+    function writeLine(text) {
       const messageDiv = document.createElement('div');
-      messageDiv.textContent = `${sender === 'user' ? 'You' : 'Bot'}: ${text}`;
+      messageDiv.textContent = text;
       chatLog.appendChild(messageDiv);
       chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function appendMessage(sender, text) {
+      writeLine(`${sender === 'user' ? 'You' : 'Bot'}: ${text}`);
     }
 
     async function sendMessage(message) {
       appendMessage('user', message);
       try {
-        const response = await fetch('<%= my_hub_chat_message_path %>', {
+        const response = await fetch('/my_hub/chat_message', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

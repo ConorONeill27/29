@@ -5,6 +5,11 @@ class RecordingsController < ApplicationController
 
   def show
     @recording = Recording.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @recording }
+    end
   end
 
   def new
@@ -19,9 +24,8 @@ class RecordingsController < ApplicationController
     @recording = Recording.new(recording_params)
 
     if @recording.save
-      ProcessAudioJob.perform_later(@recording.id)
-      redirect_to @recording,
-                  notice: "Recording uploaded! Processing in the background."
+      ProcessAudioJob.perform_now(@recording.id)
+      render json: {id: @recording.id}
     else
       Rails.logger.error(
         "Failed to save recording: #{@recording.errors.full_messages.join(", ")}"
