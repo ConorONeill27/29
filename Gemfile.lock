@@ -101,6 +101,7 @@ GEM
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    dotenv (3.1.7)
     drb (2.2.1)
     error_highlight (0.7.0)
     erubi (1.13.1)
@@ -302,6 +303,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  dotenv
   error_highlight (>= 0.6.0)
   importmap-rails
   jbuilder
